@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8C57A;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#C8914A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A0722A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGradH" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#A0722A;stop-opacity:0" />
+      <stop offset="30%" style="stop-color:#C8914A;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#C8914A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A0722A;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background (transparent for flexibility) -->
+  
+  <!-- Decorative top line -->
+  <line x1="60" y1="28" x2="340" y2="28" stroke="url(#goldGradH)" stroke-width="0.5"/>
+  
+  <!-- Small diamond ornament center top -->
+  <polygon points="200,18 204,24 200,30 196,24" fill="url(#goldGrad)" opacity="0.8"/>
+  
+  <!-- Left ornament lines -->
+  <line x1="60" y1="28" x2="140" y2="28" stroke="url(#goldGradH)" stroke-width="0.8"/>
+  <line x1="64" y1="32" x2="136" y2="32" stroke="url(#goldGradH)" stroke-width="0.3"/>
+  
+  <!-- Right ornament lines -->  
+  <line x1="260" y1="28" x2="340" y2="28" stroke="url(#goldGradH)" stroke-width="0.8"/>
+  <line x1="264" y1="32" x2="336" y2="32" stroke="url(#goldGradH)" stroke-width="0.3"/>
+
+  <!-- Main Korean text 명지원 -->
+  <text x="200" y="115" 
+    font-family="'Noto Serif KR', 'Apple SD Gothic Neo', serif" 
+    font-size="68" 
+    font-weight="300"
+    fill="url(#goldGrad)" 
+    text-anchor="middle" 
+    letter-spacing="8">명지원</text>
+  
+  <!-- Thin horizontal rule -->
+  <line x1="100" y1="130" x2="300" y2="130" stroke="url(#goldGradH)" stroke-width="0.6"/>
+  
+  <!-- English subtitle -->
+  <text x="200" y="150" 
+    font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" 
+    font-size="11" 
+    font-weight="300"
+    fill="#C8914A" 
+    text-anchor="middle" 
+    letter-spacing="6">MYEONGJIWON</text>
+    
+  <!-- Small tagline -->
+  <text x="200" y="168" 
+    font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" 
+    font-size="8" 
+    font-weight="300"
+    fill="#8A7055" 
+    text-anchor="middle" 
+    letter-spacing="3">SUNCHEON · KOREA</text>
+
+  <!-- Decorative bottom line -->
+  <line x1="60" y1="178" x2="340" y2="178" stroke="url(#goldGradH)" stroke-width="0.5"/>
+  <polygon points="200,178 204,184 200,190 196,184" fill="url(#goldGrad)" opacity="0.6"/>
+</svg>

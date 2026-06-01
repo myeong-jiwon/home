@@ -1,0 +1,8 @@
+.env
+.playwright-mcp/
+.DS_Store
+images-v8-original
+images/*.JPG
+images/*.jpg
+menu/*.png
+ai-images/*

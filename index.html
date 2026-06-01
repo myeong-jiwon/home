@@ -1,0 +1,3937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="명지원 — 전라남도 순천의 전통 숯불갈비 명가. 30년 이상의 역사, 다이닝코드 4.9점." data-i18n-attr="content:meta.desc">
+<title data-i18n="meta.title">명지원 — 순천 숯불갈비 명가</title>
+<link rel="icon" href="images-v8/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400&family=Noto+Serif+KR:wght@200;300;400&display=swap" rel="stylesheet">
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis Smooth Scroll -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<style>
+/* ─────────────────────────────────────────────
+   CUSTOM PROPERTIES
+───────────────────────────────────────────── */
+:root {
+  --bg: #070705;
+  --bg-2: #0E0C09;
+  --bg-card: #131109;
+  --bg-card-2: #1A1612;
+  --gold-bright: #F2D48A;
+  --gold: #D9A85B;
+  --gold-dim: rgba(217,168,91,0.2);
+  --gold-bg: rgba(217,168,91,0.08);
+  --cream: #F2EDE4;
+  --cream-dim: rgba(242,237,228,0.65);
+  --text-muted: #7A7060;
+  --border: rgba(217,168,91,0.2);
+  --border-dim: rgba(217,168,91,0.09);
+  --nav-height: 96px;
+  --announcement-h: 36px;
+  --total-offset: calc(var(--nav-height) + var(--announcement-h));
+}
+
+/* ─────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-padding-top: var(--total-offset);
+  background: var(--bg);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  background: var(--bg);
+  color: var(--cream);
+  overflow-x: hidden;
+}
+
+body.lenis { height: auto; }
+
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ─────────────────────────────────────────────
+   CUSTOM SCROLLBAR
+───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* ─────────────────────────────────────────────
+   CSS SCROLL-DRIVEN ANIMATION — VERTICAL LINE
+───────────────────────────────────────────── */
+.scroll-line {
+  position: fixed;
+  left: 20px;
+  top: 0;
+  width: 1px;
+  height: 0%;
+  background: var(--gold);
+  z-index: 9996;
+  pointer-events: none;
+  animation: grow-line linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0% 100%;
+}
+
+@keyframes grow-line {
+  from { height: 0%; }
+  to   { height: 100%; }
+}
+
+@media (max-width: 768px) {
+  .scroll-line { display: none; }
+}
+
+/* ─────────────────────────────────────────────
+   CSS NOISE GRAIN OVERLAY
+───────────────────────────────────────────── */
+.grain-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  animation: grain-shift 0.5s steps(2) infinite;
+}
+
+@keyframes grain-shift {
+  0%,100% { transform: translate(0,0); }
+  50%      { transform: translate(-2%,-2%); }
+}
+
+/* ─────────────────────────────────────────────
+   PAGE TRANSITION OVERLAY
+───────────────────────────────────────────── */
+#page-transition {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+#page-transition-logo {
+  width: 200px;
+  opacity: 0;
+}
+
+#page-transition-line {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin-top: 24px;
+  transition: none;
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL PROGRESS BAR
+───────────────────────────────────────────── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--gold), var(--gold-bright));
+  z-index: 9999;
+  transition: width 0.05s linear;
+}
+
+/* ─────────────────────────────────────────────
+   MAGNETIC CURSOR
+───────────────────────────────────────────── */
+#cursor-dot {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+
+#cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(200,145,74,0.45);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+}
+
+#cursor-ring.magnetic-hover {
+  width: 60px;
+  height: 60px;
+  background: var(--gold);
+  border-color: var(--gold);
+  mix-blend-mode: difference;
+}
+
+@media (max-width: 768px) {
+  #cursor-dot, #cursor-ring { display: none; }
+}
+
+/* ─────────────────────────────────────────────
+   ANNOUNCEMENT BAR
+───────────────────────────────────────────── */
+#announcement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--announcement-h);
+  background: #0E0C09;
+  border-bottom: 1px solid var(--border-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9990;
+  overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+}
+
+#announcement.closed {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#announcement-text {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+#announcement-close {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: none;
+  padding: 4px 8px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+#announcement-close:hover { color: var(--gold); }
+
+/* ─────────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────────── */
+#nav {
+  position: fixed;
+  top: var(--announcement-h);
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9980;
+  transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s, top 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+#nav.announcement-closed {
+  top: 0;
+}
+
+#nav.scrolled {
+  background: rgba(7,7,5,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom-color: var(--border);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nav-logo img {
+  height: 68px;
+  width: auto;
+}
+
+.nav-logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--cream);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream);
+  transition: color 0.25s, transform 0.25s;
+  display: inline-block;
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: var(--gold);
+  transform: translateX(3px);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-reserve-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 8px 18px;
+  transition: background 0.25s, border-color 0.25s;
+  cursor: none;
+}
+
+.nav-reserve-btn:hover {
+  background: var(--gold-bg);
+  border-color: var(--gold);
+}
+
+.nav-phone {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* Hamburger */
+#nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: none;
+  padding: 4px;
+}
+
+#nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--cream);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+#nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+#nav-hamburger.open span:nth-child(2) { opacity: 0; }
+#nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Mobile menu overlay */
+#mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(7,7,5,0.97);
+  z-index: 9970;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+#mobile-menu.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobile-menu-link {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(2.125rem, 8vw, 3.125rem);
+  color: var(--cream);
+  letter-spacing: 0.05em;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: color 0.25s, transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+}
+
+#mobile-menu.open .mobile-menu-link {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.05s; }
+#mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.10s; }
+#mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.15s; }
+#mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.20s; }
+#mobile-menu.open .mobile-menu-link:nth-child(5) { transition-delay: 0.25s; }
+
+.mobile-menu-link:hover { color: var(--gold); }
+
+.mobile-menu-phone {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  margin-top: 20px;
+  opacity: 0;
+  transition: opacity 0.4s 0.3s;
+}
+
+#mobile-menu.open .mobile-menu-phone { opacity: 1; }
+
+@media (max-width: 768px) {
+  .nav-links, .nav-right { display: none; }
+  #nav-hamburger { display: flex; }
+  #nav { padding: 0 20px; }
+}
+
+/* ─────────────────────────────────────────────
+   HERO SECTION — PARALLAX LAYERS
+───────────────────────────────────────────── */
+#hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  margin-top: var(--total-offset);
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+.hero-slide-bg {
+  position: absolute;
+  inset: -20%;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.1);
+  transition: opacity 0.8s;
+  will-change: transform;
+}
+
+.hero-slide.active .hero-slide-bg {
+  animation: kenBurns 8s ease-out forwards;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1.1); }
+  to   { transform: scale(1.0); }
+}
+
+.hero-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(7,7,5,0.82) 0%, rgba(7,7,5,0.3) 55%, transparent 100%);
+}
+
+.hero-slide-content {
+  position: absolute;
+  bottom: 18%;
+  left: 8%;
+  max-width: 720px;
+  will-change: transform;
+}
+
+.hero-slide-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.hero-slide.active .hero-slide-label {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.hero-slide-heading {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(42px, 5.4vw, 68px);
+  color: var(--cream);
+  line-height: 1.1;
+  white-space: pre-line;
+  word-break: keep-all;
+  margin-bottom: 28px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+.hero-slide.active .hero-slide-heading {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.35s;
+}
+
+.hero-slide-line {
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  margin-bottom: 28px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.hero-slide.active .hero-slide-line {
+  width: 70px;
+  transition-delay: 0.6s;
+}
+
+.hero-slide-cta {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--cream);
+  border: 1px solid rgba(242,237,228,0.4);
+  padding: 13px 28px;
+  text-transform: uppercase;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s, transform 0.5s, border-color 0.25s, background 0.25s;
+}
+
+.hero-slide.active .hero-slide-cta {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+.hero-slide-cta:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+}
+
+/* Hero scroll indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  opacity: 0.7;
+  animation: heroScrollBounce 2s ease-in-out infinite;
+}
+
+.hero-scroll-indicator span {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.hero-scroll-indicator svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--gold);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+@keyframes heroScrollBounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(6px); }
+}
+
+/* Hero controls */
+#hero-prev, #hero-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cream);
+  z-index: 10;
+  cursor: none;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+#hero-prev { left: 30px; }
+#hero-next { right: 30px; }
+
+#hero-prev:hover, #hero-next:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+}
+
+.hero-arrow-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+#hero-dots {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.hero-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(242,237,228,0.3);
+  cursor: none;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.hero-dot.active {
+  background: var(--gold);
+  transform: scale(1.3);
+}
+
+/* ─────────────────────────────────────────────
+   CANVAS EMBER PARTICLES
+───────────────────────────────────────────── */
+#ember-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.4;
+}
+
+/* ─────────────────────────────────────────────
+   CLIP-PATH REVEAL
+───────────────────────────────────────────── */
+.clip-reveal-img {
+  clip-path: inset(0 100% 0 0);
+}
+
+.clip-reveal-text {
+  clip-path: inset(0 0 100% 0);
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   REVEAL ANIMATION (fallback / additional)
+───────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ─────────────────────────────────────────────
+   SECTION COMMON
+───────────────────────────────────────────── */
+.section-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: block;
+}
+
+.section-heading {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.1;
+}
+
+/* Korean: prevent mid-word breaking for CJK headings */
+body[data-lang="ko"] .hero-slide-heading,
+body[data-lang="ko"] .section-heading,
+body[data-lang="ko"] .reveal-text,
+body[data-lang="ko"] .menubook-intro h2,
+body[data-lang="ko"] .private-heading {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.gold-line {
+  height: 1px;
+  background: var(--gold);
+  margin: 24px 0;
+}
+
+.gold-line-center {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 24px auto;
+}
+
+/* ─────────────────────────────────────────────
+   REVEAL TEXT (word-by-word)
+───────────────────────────────────────────── */
+.reveal-text .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.reveal-text .word-inner {
+  display: inline-block;
+  transform: translateY(40px);
+  opacity: 0;
+}
+
+/* ─────────────────────────────────────────────
+   INTRO BAND
+───────────────────────────────────────────── */
+#intro {
+  background: var(--bg-2);
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.intro-logo {
+  width: 70px;
+  margin: 0 auto 28px;
+}
+
+.intro-heading {
+  font-size: clamp(28px, 3.5vw, 46px);
+  white-space: pre-line;
+  margin-bottom: 0;
+}
+
+.intro-gold-line {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 24px auto;
+}
+
+.intro-body {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 17px;
+  color: var(--cream-dim);
+  max-width: 640px;
+  line-height: 2;
+  margin: 0 auto 40px;
+}
+
+.intro-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-gold-fill {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: #050402;
+  background: var(--gold-bright);
+  border: 1px solid var(--gold-bright);
+  padding: 13px 32px;
+  text-transform: uppercase;
+  transition: background 0.25s, transform 0.2s;
+  cursor: none;
+  display: inline-block;
+}
+
+.btn-gold-fill:hover {
+  background: var(--gold);
+  transform: translateY(-2px);
+}
+
+.btn-gold-outline {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--cream);
+  background: transparent;
+  border: 1px solid var(--gold);
+  padding: 13px 32px;
+  text-transform: uppercase;
+  transition: background 0.25s, color 0.25s, transform 0.2s;
+  cursor: none;
+  display: inline-block;
+}
+
+.btn-gold-outline:hover {
+  background: var(--gold);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+
+/* ─────────────────────────────────────────────
+   HERITAGE STRIP
+───────────────────────────────────────────── */
+#heritage {
+  background: #0A0805;
+  padding: 56px 20px;
+}
+
+.heritage-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heritage-col {
+  flex: 1;
+  text-align: center;
+  padding: 0 40px;
+}
+
+.heritage-col + .heritage-col {
+  border-left: 1px solid rgba(200,145,74,0.15);
+}
+
+.heritage-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 56px;
+  color: var(--gold-bright);
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.heritage-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.5);
+}
+
+.heritage-center-small {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.heritage-center-heading {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+  line-height: 1.3;
+  white-space: pre-line;
+}
+
+@media (max-width: 600px) {
+  .heritage-inner { flex-direction: column; gap: 40px; }
+  .heritage-col + .heritage-col { border-left: none; border-top: 1px solid rgba(200,145,74,0.15); padding-top: 40px; }
+  .heritage-col { padding: 0; }
+}
+
+/* ─────────────────────────────────────────────
+   MENU SECTION — GSAP PINNED HORIZONTAL
+───────────────────────────────────────────── */
+.menu-section {
+  background: var(--bg);
+  padding-top: 120px;
+  overflow: hidden;
+}
+
+.menu-header {
+  text-align: center;
+  padding: 0 20px;
+  margin-bottom: 60px;
+}
+
+.menu-heading {
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  margin-bottom: 12px;
+}
+
+.menu-subtitle {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 18px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* Pinned horizontal track */
+.menu-pin-wrap {
+  overflow: hidden;
+}
+
+.menu-track {
+  display: flex;
+  gap: 24px;
+  padding: 0 60px 40px;
+  width: max-content;
+  will-change: transform;
+}
+
+.menu-card {
+  flex-shrink: 0;
+  width: 320px;
+  height: 440px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: border-color 0.3s;
+  cursor: none;
+}
+
+.menu-card:hover {
+  border-color: var(--gold-dim);
+}
+
+.menu-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.menu-card:hover .menu-card-img {
+  transform: scale(1.06);
+}
+
+.menu-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(7,7,5,0.92) 0%, rgba(7,7,5,0.2) 60%, transparent 100%);
+}
+
+/* Tilt highlight overlay */
+.menu-card-tilt-highlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.menu-card:hover .menu-card-tilt-highlight {
+  opacity: 1;
+}
+
+.menu-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 24px;
+}
+
+.menu-card-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.menu-card-name {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+
+.menu-card-desc {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: rgba(242,237,228,0.65);
+  line-height: 1.6;
+}
+
+.menu-card-price {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: var(--gold-bright);
+  margin-top: 8px;
+}
+
+.menu-note {
+  text-align: center;
+  padding: 50px 20px 80px;
+}
+
+.menu-note-inner {
+  display: inline-block;
+  border: 1px solid var(--border);
+  padding: 20px 40px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+
+/* Mobile menu fallback */
+@media (max-width: 768px) {
+  .menu-pin-wrap { overflow-x: auto; }
+  .menu-track { width: auto; padding-bottom: 20px; }
+  .menu-card { width: 260px; height: 360px; }
+}
+
+/* ─────────────────────────────────────────────
+   BRAND STORY
+───────────────────────────────────────────── */
+#story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.story-left {
+  position: relative;
+  min-height: 60vh;
+  overflow: hidden;
+}
+
+.story-left-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('images-v8/DSC00391.webp');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: transform 0.8s;
+}
+
+.story-left:hover .story-left-bg { transform: scale(1.0); }
+
+.story-left-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(7,7,5,0.72);
+}
+
+.story-left-content {
+  position: relative;
+  z-index: 1;
+  padding: 80px 10% 80px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.story-right {
+  background: var(--bg-card);
+  padding: 80px 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.story-heading {
+  font-size: clamp(2.2rem, 3.5vw, 4rem);
+  white-space: pre-line;
+  margin-bottom: 0;
+}
+
+.story-body {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: rgba(242,237,228,0.6);
+  line-height: 2;
+  margin-top: 4px;
+  max-width: 420px;
+}
+
+.story-right-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.8rem, 2.5vw, 3rem);
+  color: var(--cream);
+  line-height: 1.15;
+  white-space: pre-line;
+  margin-bottom: 20px;
+}
+
+.story-right-body {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: var(--cream-dim);
+  line-height: 2.2;
+  max-width: 440px;
+  margin-bottom: 28px;
+}
+
+.story-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.story-bullets li {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: var(--cream-dim);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.story-bullets li::before {
+  content: "—";
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  #story { grid-template-columns: 1fr; }
+  .story-left { min-height: 50vh; }
+  .story-left-content, .story-right { padding: 60px 8%; }
+}
+
+/* ─────────────────────────────────────────────
+   SPACE GALLERY
+───────────────────────────────────────────── */
+#space {
+  background: var(--bg);
+  padding: 120px 0;
+}
+
+.space-header {
+  text-align: center;
+  padding: 0 20px;
+  margin-bottom: 60px;
+}
+
+.space-heading {
+  font-size: clamp(3rem, 5vw, 5.5rem);
+}
+
+.space-subtitle {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+
+.space-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 320px 320px;
+  gap: 6px;
+  padding: 0 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.space-grid-item {
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+.space-grid-item.wide {
+  grid-column: span 2;
+}
+
+.space-grid-item.tall {
+  grid-row: span 2;
+}
+
+.space-grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+.space-grid-item:hover img {
+  transform: scale(1.05);
+}
+
+.space-grid-vignette {
+  position: absolute;
+  inset: 0;
+  background: rgba(7,7,5,0);
+  transition: background 0.35s;
+  pointer-events: none;
+}
+
+.space-grid-item:hover .space-grid-vignette {
+  background: rgba(7,7,5,0.35);
+}
+
+.space-note {
+  text-align: center;
+  margin-top: 40px;
+  padding: 0 20px;
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 15px;
+  color: var(--text-muted);
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+  .space-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .space-grid-item.wide { grid-column: span 2; height: 220px; }
+  .space-grid-item.tall { grid-row: span 1; height: 220px; }
+  .space-grid-item { height: 220px; }
+}
+
+@media (max-width: 500px) {
+  .space-grid { grid-template-columns: 1fr; }
+  .space-grid-item.wide { grid-column: span 1; }
+  .space-grid-item { height: 200px; }
+}
+
+/* ─────────────────────────────────────────────
+   PRIVATE DINING FULLWIDTH
+───────────────────────────────────────────── */
+#private {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.private-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('images-v8/DSC00482.webp');
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+.private-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(7,7,5,0.65);
+}
+
+.private-content {
+  position: relative;
+  z-index: 1;
+  padding: 80px 20px;
+  max-width: 700px;
+}
+
+.private-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.private-heading {
+  font-size: clamp(2.5rem, 5vw, 5.5rem);
+  white-space: pre-line;
+  word-break: keep-all;
+  margin-bottom: 24px;
+}
+
+.private-gold-line {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto 28px;
+}
+
+.private-desc {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 18px;
+  color: rgba(242,237,228,0.7);
+  max-width: 480px;
+  margin: 0 auto 36px;
+  line-height: 1.9;
+}
+
+.btn-cream-outline {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: #fff8ec;
+  border: 1px solid rgba(242,237,228,0.75);
+  padding: 14px 32px;
+  text-transform: uppercase;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+  cursor: none;
+  display: inline-block;
+}
+
+.btn-cream-outline:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+}
+
+/* ─────────────────────────────────────────────
+   CTA CARDS
+───────────────────────────────────────────── */
+#cta-cards {
+  background: var(--bg-card);
+  padding: 80px 20px;
+}
+
+.cta-cards-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.cta-card {
+  background: rgba(242,237,228,0.03);
+  border: 1px solid var(--border-dim);
+  padding: 48px 36px;
+  text-align: center;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  cursor: none;
+}
+
+.cta-card:hover {
+  border-color: var(--gold);
+  background: var(--gold-bg);
+  transform: translateY(-4px);
+}
+
+.cta-card-icon {
+  font-size: 32px;
+  margin-bottom: 20px;
+  display: block;
+  filter: sepia(1) saturate(2) hue-rotate(15deg) brightness(1.2);
+}
+
+.cta-card-title {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.cta-card-desc {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 16px;
+  color: var(--cream-dim);
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+.cta-card-link {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  transition: color 0.2s, letter-spacing 0.2s;
+}
+
+.cta-card:hover .cta-card-link {
+  letter-spacing: 0.3em;
+}
+
+@media (max-width: 768px) {
+  .cta-cards-inner { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────
+   PHOTO GALLERY GRID
+───────────────────────────────────────────── */
+#gallery {
+  background: var(--bg-2);
+  padding: 100px 0;
+}
+
+.gallery-header {
+  text-align: center;
+  padding: 0 20px;
+  margin-bottom: 50px;
+}
+
+.gallery-heading {
+  font-size: clamp(2.5rem, 4vw, 5rem);
+}
+
+.gallery-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.gallery-grid-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  cursor: none;
+}
+
+.gallery-grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.gallery-grid-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(200,145,74,0);
+  transition: background 0.3s;
+  pointer-events: none;
+}
+
+.gallery-grid-item:hover .gallery-grid-overlay {
+  background: rgba(200,145,74,0.22);
+}
+
+@media (max-width: 600px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ─────────────────────────────────────────────
+   LOCATION
+───────────────────────────────────────────── */
+#location {
+  background: var(--bg);
+  padding: 120px 20px;
+}
+
+.location-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.location-heading {
+  font-size: clamp(2.5rem, 4vw, 5rem);
+  margin-bottom: 0;
+}
+
+.location-eyebrow {
+  font-size: 14px;
+}
+
+.location-gold-line {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 24px 0;
+}
+
+.location-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.location-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.location-item-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.location-item-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.location-item-value {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 19px;
+  color: var(--cream-dim);
+  line-height: 1.7;
+}
+
+.location-item-value a {
+  color: var(--gold);
+  transition: color 0.2s;
+}
+
+.location-item-value a:hover { color: var(--gold-bright); }
+
+.location-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.btn-gold-map {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--gold-bright);
+  background: transparent;
+  border: 1px solid rgba(232,197,122,0.75);
+  padding: 13px 32px;
+  text-transform: uppercase;
+  transition: background 0.25s, color 0.25s, transform 0.2s;
+  cursor: none;
+  display: inline-block;
+}
+
+.btn-gold-map:hover {
+  background: var(--gold-bright);
+  color: #050402;
+  transform: translateY(-2px);
+}
+
+.location-map iframe {
+  width: 100%;
+  height: 420px;
+  border: none;
+  display: block;
+  filter: none;
+}
+
+@media (max-width: 900px) {
+  .location-inner {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+#footer {
+  background: #040402;
+}
+
+.footer-top {
+  padding: 80px 40px 60px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(200,145,74,0.08);
+}
+
+.footer-col-brand img {
+  height: 40px;
+  width: auto;
+  margin-bottom: 20px;
+  filter: brightness(0.8);
+}
+
+.footer-col-brand-info {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 200;
+  font-size: 15px;
+  color: rgba(242,237,228,0.68);
+  line-height: 1.9;
+}
+
+.footer-col-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.footer-col-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  color: rgba(242,237,228,0.72);
+  transition: color 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.footer-col-links a:hover { color: var(--gold); }
+
+.footer-bottom {
+  padding: 20px 40px;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 200;
+  font-size: 14px;
+  color: rgba(242,237,228,0.55);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 1024px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 60px 20px 40px;
+  }
+  .footer-col-brand { grid-column: span 3; }
+}
+
+@media (max-width: 600px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-col-brand { grid-column: span 2; }
+  .footer-bottom { padding: 20px; font-size: 13px; line-height: 1.6; }
+}
+
+/* ─────────────────────────────────────────────
+   TILT CARD (3D)
+───────────────────────────────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transform: perspective(800px) rotateX(0deg) rotateY(0deg) scale(1);
+  transition: box-shadow 0.3s;
+  will-change: transform;
+}
+
+/* ─────────────────────────────────────────────
+   SECTION FADE-IN UTILITY
+───────────────────────────────────────────── */
+.gsap-fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ─────────────────────────────────────────────
+   MENU BOOK SECTION (v7)
+───────────────────────────────────────────── */
+.menubook-section {
+  position: relative;
+  padding: 140px 24px;
+  background: var(--bg);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.menubook-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 30%, rgba(200,145,74,0.10), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 80%, rgba(232,197,122,0.05), transparent 70%);
+  z-index: 0;
+}
+
+.menubook-section > *:not(.menubook-glow) { position: relative; z-index: 1; }
+
+.menubook-intro {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 60px;
+}
+
+.menubook-intro .eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+  padding: 6px 18px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 999px;
+  background: var(--gold-bg);
+}
+
+.menubook-intro h2 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  color: var(--cream);
+  font-size: clamp(48px, 6vw, 88px);
+  line-height: 1.05;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+
+.menubook-intro h2 em {
+  font-style: italic;
+  color: var(--gold-bright);
+}
+
+.menubook-intro p {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 300;
+  color: var(--cream-dim);
+  font-size: 18px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+}
+
+.menubook-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 56px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+.menubook-tabs::-webkit-scrollbar { display: none; }
+
+.menubook-tab {
+  position: relative;
+  padding: 14px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.4s ease;
+  white-space: nowrap;
+  background: transparent;
+}
+
+.menubook-tab::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 1px;
+  background: var(--gold-bright);
+  transform: translateX(-50%);
+  transition: width 0.5s cubic-bezier(.2,.7,.2,1);
+}
+
+.menubook-tab:hover { color: var(--cream-dim); }
+
+.menubook-tab.active {
+  color: var(--gold-bright);
+}
+
+.menubook-tab.active::after { width: 32px; }
+
+.menubook-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.menubook-nav {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  background: transparent;
+  color: var(--gold-bright);
+  font-size: 32px;
+  font-family: 'DM Serif Display', serif;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+}
+
+.menubook-nav:hover {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+  transform: scale(1.05);
+}
+
+.menubook-frame {
+  position: relative;
+  flex: 0 1 980px;
+  max-width: 980px;
+  width: 100%;
+  padding: 32px;
+  background:
+    linear-gradient(135deg, #1a1612, #0e0c09),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  background-blend-mode: overlay;
+  border: 1px solid rgba(200,145,74,0.3);
+  box-shadow:
+    0 60px 120px -20px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(200,145,74,0.15) inset;
+  perspective: 1600px;
+}
+
+.menubook-frame::before,
+.menubook-frame::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--gold-bright);
+  pointer-events: none;
+}
+
+.menubook-frame::before {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.menubook-frame::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
+
+.menubook-frame > .menubook-corner-tr,
+.menubook-frame > .menubook-corner-bl {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--gold-bright);
+  pointer-events: none;
+}
+
+.menubook-pages {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  transform-style: preserve-3d;
+}
+
+.menubook-spread {
+  position: absolute;
+  inset: 0;
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: 18px;
+  backface-visibility: hidden;
+}
+
+.menubook-spread.active { display: grid; }
+
+.menubook-page {
+  min-width: 0;
+  height: 100%;
+}
+
+.menubook-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7);
+  cursor: none;
+}
+
+.menubook-zoom {
+  position: absolute;
+  bottom: 44px;
+  right: 44px;
+  width: 44px;
+  height: 44px;
+  background: rgba(7,7,5,0.75);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-bright);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  z-index: 5;
+}
+
+.menubook-zoom:hover {
+  background: var(--gold);
+  color: var(--bg);
+  transform: scale(1.08);
+}
+
+.menubook-counter {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 56px;
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+}
+
+.menubook-counter .cur {
+  font-size: 32px;
+  color: var(--gold-bright);
+}
+
+.menubook-counter .sep {
+  font-size: 22px;
+  color: var(--text-muted);
+}
+
+.menubook-counter .total {
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+/* Lightbox */
+.menubook-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(7,7,5,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.menubook-lightbox.open { display: flex; }
+
+.menubook-lightbox .lightbox-img {
+  max-width: 90vw;
+  max-height: 88vh;
+  border: 1px solid rgba(200,145,74,0.3);
+  padding: 16px;
+  background: linear-gradient(135deg, #1a1612, #0e0c09);
+  box-shadow:
+    0 80px 160px -20px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(200,145,74,0.15) inset;
+}
+
+.menubook-lightbox .lightbox-close {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-bright);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.menubook-lightbox .lightbox-close:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+.menubook-lightbox .lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  background: rgba(7,7,5,0.6);
+  color: var(--gold-bright);
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menubook-lightbox .lightbox-nav.prev { left: 32px; }
+.menubook-lightbox .lightbox-nav.next { right: 32px; }
+
+.menubook-lightbox .lightbox-nav:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+.menubook-lightbox .lightbox-counter {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  color: var(--gold-bright);
+  font-size: 16px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  .menubook-section { padding: 80px 16px; }
+  .menubook-intro { margin-bottom: 40px; }
+  .menubook-stage { gap: 8px; }
+  .menubook-nav { width: 42px; height: 42px; font-size: 24px; }
+  .menubook-frame { padding: 18px; flex-basis: auto; max-width: 88vw; }
+  .menubook-frame::before, .menubook-frame::after { width: 16px; height: 16px; }
+  .menubook-tabs { justify-content: flex-start; padding: 0 8px 8px; }
+  .menubook-tab { padding: 12px 18px; font-size: 14px; }
+  .menubook-pages { aspect-ratio: 3 / 8; }
+  .menubook-spread { grid-template-columns: 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .menubook-zoom { bottom: 26px; right: 26px; width: 38px; height: 38px; }
+  .menubook-counter { margin-top: 36px; }
+  .menubook-lightbox .lightbox-nav { width: 44px; height: 44px; font-size: 24px; }
+  .menubook-lightbox .lightbox-nav.prev { left: 8px; }
+  .menubook-lightbox .lightbox-nav.next { right: 8px; }
+  .menubook-lightbox .lightbox-close { top: 16px; right: 16px; width: 40px; height: 40px; }
+  .menubook-lightbox .lightbox-img { padding: 8px; max-width: 94vw; max-height: 80vh; }
+}
+
+/* ─────────────────────────────────────────────
+   LANGUAGE TOGGLE (v8)
+───────────────────────────────────────────── */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+}
+.lang-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 4px 2px;
+  background: transparent;
+  transition: color 0.25s ease;
+  cursor: none;
+}
+.lang-btn:hover { color: var(--cream); }
+.lang-btn.active { color: var(--gold-bright); }
+.lang-sep {
+  color: var(--gold-dim);
+  font-size: 11px;
+  font-weight: 200;
+  user-select: none;
+}
+.mobile-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  opacity: 0;
+  transition: opacity 0.4s 0.35s;
+}
+#mobile-menu.open .mobile-lang-toggle { opacity: 1; }
+.mobile-lang-toggle .lang-btn { font-size: 15px; letter-spacing: 0.2em; }
+
+body[data-lang="en"] .reveal-text,
+body[data-lang="en"] h1,
+body[data-lang="en"] h2 {
+  letter-spacing: -0.01em;
+}
+body[data-lang="ko"] .dm-sans-text { font-family: 'DM Sans', 'Noto Sans KR', sans-serif; }
+body[data-lang="en"] h1, body[data-lang="en"] h2 { font-family: 'DM Serif Display', serif; }
+.menubook-tab { min-width: 120px; text-align: center; }
+</style>
+</head>
+<body class="grain-overlay">
+
+<!-- ─── PAGE TRANSITION OVERLAY ─── -->
+<div id="page-transition" aria-hidden="true">
+  <img id="page-transition-logo" src="images-v8/logo.svg" alt="명지원" onerror="this.style.display='none'">
+  <div id="page-transition-line"></div>
+</div>
+
+<!-- ─── EMBER CANVAS ─── -->
+<canvas id="ember-canvas" aria-hidden="true"></canvas>
+
+<!-- ─── SCROLL LINE (CSS scroll-driven) ─── -->
+<div class="scroll-line" aria-hidden="true"></div>
+
+<!-- ─── SCROLL PROGRESS BAR ─── -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- ─── MAGNETIC CURSOR ─── -->
+<div id="cursor-dot" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
+
+<!-- ─── ANNOUNCEMENT BAR ─── -->
+<div id="announcement" role="banner" data-i18n-attr="aria-label:announcement.aria">
+  <span id="announcement-text" data-i18n="announcement.text">
+    NEW · 정식 메뉴판 공개 · 매일 11:30 ~ 22:00 · 라스트오더 21:00 · 예약문의 0507-1337-2392
+  </span>
+  <button id="announcement-close" data-i18n-attr="aria-label:announcement.close,title:announcement.close">✕</button>
+</div>
+
+<!-- ─── NAVIGATION ─── -->
+<nav id="nav" role="navigation" data-i18n-attr="aria-label:nav.aria">
+  <a href="#" class="nav-logo magnetic" data-i18n-attr="aria-label:nav.logoAria">
+    <img src="images-v8/logo.svg" alt="MYEONGJIWON" onerror="this.style.display='none'">
+    <span class="nav-logo-text" style="display:none;" id="nav-logo-text">명지원</span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="#intro" class="magnetic" data-i18n="nav.intro">소개</a></li>
+    <li><a href="#menu" class="magnetic" data-i18n="nav.menu">메뉴</a></li>
+    <li><a href="#space" class="magnetic" data-i18n="nav.space">공간</a></li>
+    <li><a href="#private" class="magnetic" data-i18n="nav.private">프라이빗</a></li>
+    <li><a href="#location" class="magnetic" data-i18n="nav.location">오시는길</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lang-btn active" data-lang="ko" aria-pressed="true">KO</button>
+      <span class="lang-sep">/</span>
+      <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a href="tel:05071337239" class="nav-reserve-btn magnetic" role="button" data-i18n="nav.reserve">예약 문의</a>
+    <a href="tel:05071337239" class="nav-phone" data-i18n="nav.phone">0507-1337-2392</a>
+  </div>
+  <button id="nav-hamburger" aria-expanded="false" data-i18n-attr="aria-label:nav.menuOpen">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── MOBILE MENU ─── -->
+<div id="mobile-menu" role="dialog" aria-hidden="true" data-i18n-attr="aria-label:nav.mobileAria">
+  <a href="#intro" class="mobile-menu-link" data-i18n="nav.intro">소개</a>
+  <a href="#menu" class="mobile-menu-link" data-i18n="nav.menu">메뉴</a>
+  <a href="#space" class="mobile-menu-link" data-i18n="nav.space">공간</a>
+  <a href="#private" class="mobile-menu-link" data-i18n="nav.private">프라이빗</a>
+  <a href="#location" class="mobile-menu-link" data-i18n="nav.location">오시는길</a>
+  <a href="tel:05071337239" class="mobile-menu-phone" data-i18n="nav.phone">0507-1337-2392</a>
+  <div class="mobile-lang-toggle" role="group" aria-label="Language">
+    <button class="lang-btn active" data-lang="ko" aria-pressed="true">KO</button>
+    <span class="lang-sep">/</span>
+    <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+</div>
+
+<!-- ─── MAIN CONTENT ─── -->
+<main id="main-content">
+
+<!-- ══ HERO SLIDESHOW ══ -->
+<section id="hero" data-i18n-attr="aria-label:hero.aria">
+
+  <!-- Slide 1 -->
+  <article class="hero-slide active" aria-roledescription="slide" data-i18n-attr="aria-label:hero.slide1.aria">
+    <div class="hero-slide-bg" style="background-image:url('images-v8/DSC00530.webp')"></div>
+    <div class="hero-slide-overlay"></div>
+    <div class="hero-slide-content">
+      <span class="hero-slide-label" data-i18n="hero.slide1.eyebrow">MYEONGJIWON SIGNATURE</span>
+      <h1 class="hero-slide-heading" data-i18n="hero.slide1.title">불꽃 위에서
+완성되는 맛</h1>
+      <div class="hero-slide-line"></div>
+      <a href="#menu" class="hero-slide-cta magnetic" data-i18n="hero.cta">자세히 보기</a>
+    </div>
+  </article>
+
+  <!-- Slide 2 -->
+  <article class="hero-slide" aria-roledescription="slide" data-i18n-attr="aria-label:hero.slide2.aria">
+    <div class="hero-slide-bg" style="background-image:url('images-v8/DSC00394.webp')"></div>
+    <div class="hero-slide-overlay"></div>
+    <div class="hero-slide-content">
+      <span class="hero-slide-label" data-i18n="hero.slide2.eyebrow">SUNCHEON · KOREA</span>
+      <h2 class="hero-slide-heading" data-i18n="hero.slide2.title">순천의 빛 속에
+빛나는 갈비</h2>
+      <div class="hero-slide-line"></div>
+      <a href="#story" class="hero-slide-cta magnetic" data-i18n="hero.cta">자세히 보기</a>
+    </div>
+  </article>
+
+  <!-- Slide 3 -->
+  <article class="hero-slide" aria-roledescription="slide" data-i18n-attr="aria-label:hero.slide3.aria">
+    <div class="hero-slide-bg" style="background-image:url('images-v8/DSC00386.webp')"></div>
+    <div class="hero-slide-overlay"></div>
+    <div class="hero-slide-content">
+      <span class="hero-slide-label" data-i18n="hero.slide3.eyebrow">MAIN DINING</span>
+      <h2 class="hero-slide-heading" data-i18n="hero.slide3.title">전통과 현대가
+어우러진 공간</h2>
+      <div class="hero-slide-line"></div>
+      <a href="#space" class="hero-slide-cta magnetic" data-i18n="hero.cta">자세히 보기</a>
+    </div>
+  </article>
+
+  <!-- Slide 4 -->
+  <article class="hero-slide" aria-roledescription="slide" data-i18n-attr="aria-label:hero.slide4.aria">
+    <div class="hero-slide-bg" style="background-image:url('images-v8/DSC00414.webp')"></div>
+    <div class="hero-slide-overlay"></div>
+    <div class="hero-slide-content">
+      <span class="hero-slide-label" data-i18n="hero.slide4.eyebrow">SINCE 1990s</span>
+      <h2 class="hero-slide-heading" data-i18n="hero.slide4.title">순천의 하늘 아래
+명가의 맛</h2>
+      <div class="hero-slide-line"></div>
+      <a href="#intro" class="hero-slide-cta magnetic" data-i18n="hero.cta">자세히 보기</a>
+    </div>
+  </article>
+
+  <!-- Slide 5 -->
+  <article class="hero-slide" aria-roledescription="slide" data-i18n-attr="aria-label:hero.slide5.aria">
+    <div class="hero-slide-bg" style="background-image:url('images-v8/DSC00480.webp')"></div>
+    <div class="hero-slide-overlay"></div>
+    <div class="hero-slide-content">
+      <span class="hero-slide-label" data-i18n="hero.slide5.eyebrow">PRIVATE DINING</span>
+      <h2 class="hero-slide-heading" data-i18n="hero.slide5.title">소중한 모임을 위한
+특별한 공간</h2>
+      <div class="hero-slide-line"></div>
+      <a href="#private" class="hero-slide-cta magnetic" data-i18n="hero.cta">자세히 보기</a>
+    </div>
+  </article>
+
+  <!-- Controls -->
+  <button id="hero-prev" data-i18n-attr="aria-label:hero.prev" class="magnetic">
+    <svg class="hero-arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+  <button id="hero-next" data-i18n-attr="aria-label:hero.next" class="magnetic">
+    <svg class="hero-arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+
+  <div id="hero-dots" role="tablist" data-i18n-attr="aria-label:hero.dotsAria">
+    <button class="hero-dot active magnetic" role="tab" aria-selected="true" data-i18n-attr="aria-label:hero.dot1"></button>
+    <button class="hero-dot magnetic" role="tab" aria-selected="false" data-i18n-attr="aria-label:hero.dot2"></button>
+    <button class="hero-dot magnetic" role="tab" aria-selected="false" data-i18n-attr="aria-label:hero.dot3"></button>
+    <button class="hero-dot magnetic" role="tab" aria-selected="false" data-i18n-attr="aria-label:hero.dot4"></button>
+    <button class="hero-dot magnetic" role="tab" aria-selected="false" data-i18n-attr="aria-label:hero.dot5"></button>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll-indicator magnetic" aria-hidden="true">
+    <span data-i18n="hero.scroll">scroll</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  </div>
+
+</section>
+
+
+<!-- ══ INTRO BAND ══ -->
+<section id="intro" data-i18n-attr="aria-label:intro.aria">
+  <div class="intro-logo gsap-fade-section">
+    <img src="images-v8/logo.svg" alt="MYEONGJIWON" onerror="this.parentElement.style.display='none'">
+  </div>
+  <h2 class="section-heading intro-heading reveal-text gsap-fade-section" data-i18n="intro.title">사람과 사람이 마주앉아 따뜻함을 나누는 공간</h2>
+  <div class="intro-gold-line gsap-fade-section"></div>
+  <p class="intro-body gsap-fade-section" data-i18n="intro.body">전라남도 순천에서 수십 년간 사랑받아온 명지원은 최상의 국내산 갈비를 전통 참숯 불 위에 구워 정성을 다해 대접합니다.</p>
+  <div class="intro-buttons gsap-fade-section">
+    <a href="#menu" class="btn-gold-fill magnetic" data-i18n="intro.ctaMenu">메뉴 보기</a>
+    <a href="#location" class="btn-gold-outline magnetic" data-i18n="intro.ctaLocation">오시는 길</a>
+  </div>
+</section>
+
+
+<!-- ══ HERITAGE STRIP ══ -->
+<section id="heritage" data-i18n-attr="aria-label:heritage.aria">
+  <div class="heritage-inner">
+    <div class="heritage-col gsap-fade-section">
+      <span class="heritage-number" data-count="4.9" data-decimals="1">4.9</span>
+      <span class="heritage-label" data-i18n="heritage.rating">다이닝코드</span>
+    </div>
+    <div class="heritage-col gsap-fade-section">
+      <span class="heritage-center-small" data-i18n="heritage.brand">명지원</span>
+      <span class="heritage-center-heading section-heading" data-i18n="heritage.title">순천 숯불갈비
+대표 명가</span>
+    </div>
+    <div class="heritage-col gsap-fade-section">
+      <span class="heritage-number" data-count="30" data-suffix="+">30+</span>
+      <span class="heritage-label" data-i18n="heritage.years">년의 역사</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MENU SECTION — GSAP PINNED HORIZONTAL ══ -->
+<section class="menu-section" id="menu" data-i18n-attr="aria-label:menu.aria">
+  <div class="menu-header">
+    <span class="section-eyebrow gsap-fade-section" data-i18n="menu.eyebrow">MENU</span>
+    <h2 class="section-heading menu-heading reveal-text gsap-fade-section" data-i18n="menu.title">메뉴</h2>
+    <p class="menu-subtitle gsap-fade-section" data-i18n="menu.sub">숯불 위에서 완성되는 맛</p>
+  </div>
+
+  <div class="menu-pin-wrap">
+    <div class="menu-track" id="menu-track">
+
+      <article class="menu-card tilt-card" role="listitem">
+        <img class="menu-card-img" src="images-v8/DSC00524.webp" alt="" data-i18n-attr="alt:menu.card1.name" loading="lazy">
+        <div class="menu-card-overlay"></div>
+        <div class="menu-card-tilt-highlight"></div>
+        <div class="menu-card-content">
+          <div class="menu-card-tag" data-i18n="menu.card1.tag">SIGNATURE</div>
+          <div class="menu-card-name" data-i18n="menu.card1.name">소왕양념갈비</div>
+          <div class="menu-card-desc" data-i18n="menu.card1.desc">갈비대가 붙어있는 찐 소갈비</div>
+        </div>
+      </article>
+
+      <article class="menu-card tilt-card" role="listitem">
+        <img class="menu-card-img" src="images-v8/DSC00530.webp" alt="" data-i18n-attr="alt:menu.card2.name" loading="lazy">
+        <div class="menu-card-overlay"></div>
+        <div class="menu-card-tilt-highlight"></div>
+        <div class="menu-card-content">
+          <div class="menu-card-tag" data-i18n="menu.card2.tag">BEST SELLER</div>
+          <div class="menu-card-name" data-i18n="menu.card2.name">녹차돼지갈비</div>
+          <div class="menu-card-desc" data-i18n="menu.card2.desc">청정 녹차 먹인 돼지 갈비</div>
+          <div class="menu-card-price" data-i18n="menu.card2.price">19,000원</div>
+        </div>
+      </article>
+
+      <article class="menu-card tilt-card" role="listitem">
+        <img class="menu-card-img" src="images-v8/DSC00483.webp" alt="" data-i18n-attr="alt:menu.card3.name" loading="lazy">
+        <div class="menu-card-overlay"></div>
+        <div class="menu-card-tilt-highlight"></div>
+        <div class="menu-card-content">
+          <div class="menu-card-tag" data-i18n="menu.card3.tag">LUNCH</div>
+          <div class="menu-card-name" data-i18n="menu.card3.name">점심특선</div>
+          <div class="menu-card-desc" data-i18n="menu.card3.desc">평일 14:00까지 · 2인 이상</div>
+        </div>
+      </article>
+
+      <article class="menu-card tilt-card" role="listitem">
+        <img class="menu-card-img" src="images-v8/DSC00535.webp" alt="" data-i18n-attr="alt:menu.card4.name" loading="lazy">
+        <div class="menu-card-overlay"></div>
+        <div class="menu-card-tilt-highlight"></div>
+        <div class="menu-card-content">
+          <div class="menu-card-tag" data-i18n="menu.card4.tag">SIDE</div>
+          <div class="menu-card-name" data-i18n="menu.card4.name">오곡돌솥밥</div>
+          <div class="menu-card-desc" data-i18n="menu.card4.desc">갈비와 함께하는 구수한 돌솥밥</div>
+        </div>
+      </article>
+
+      <article class="menu-card tilt-card" role="listitem">
+        <img class="menu-card-img" src="images-v8/DSC00482.webp" alt="" data-i18n-attr="alt:menu.card5.name" loading="lazy">
+        <div class="menu-card-overlay"></div>
+        <div class="menu-card-tilt-highlight"></div>
+        <div class="menu-card-content">
+          <div class="menu-card-tag" data-i18n="menu.card5.tag">PRIVATE</div>
+          <div class="menu-card-name" data-i18n="menu.card5.name">프라이빗 코스</div>
+          <div class="menu-card-desc" data-i18n="menu.card5.desc">룸에서 즐기는 특별한 식사</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="menu-note gsap-fade-section">
+    <div class="menu-note-inner" data-i18n="menu.note">정성껏 준비한 한 상, 편안한 식사로 이어집니다</div>
+  </div>
+</section>
+
+
+<!-- ══ MENU BOOK (v7) ══ -->
+<section class="menubook-section" id="menubook" data-i18n-attr="aria-label:menubook.aria">
+  <div class="menubook-glow" aria-hidden="true"></div>
+  <div class="menubook-intro">
+    <span class="eyebrow" data-i18n="menubook.eyebrow">MENU · 정식 메뉴판</span>
+    <h2 class="reveal-text" data-i18n="menubook.title">전통이 담긴 한 페이지</h2>
+    <p data-i18n="menubook.body">30년 명인의 손맛을 담은 명지원의 정식 메뉴를 한 장씩 펼쳐 보세요.</p>
+  </div>
+
+  <div class="menubook-tabs" role="tablist">
+    <button class="menubook-tab active" data-idx="0" type="button" data-i18n="menubook.tab1">고기류</button>
+    <button class="menubook-tab" data-idx="1" type="button" data-i18n="menubook.tab2">식사류 / 점심특선</button>
+  </div>
+
+  <div class="menubook-stage">
+    <button class="menubook-nav prev magnetic" data-i18n-attr="aria-label:menubook.prev" type="button">‹</button>
+    <div class="menubook-frame">
+      <div class="menubook-pages">
+        <div class="menubook-spread active">
+          <div class="menubook-page"><img src="images-v8/menu1.webp" alt="" data-i18n-attr="alt:menubook.alt1" loading="lazy" /></div>
+          <div class="menubook-page"><img src="images-v8/menu2.webp" alt="" data-i18n-attr="alt:menubook.alt2" loading="lazy" /></div>
+        </div>
+        <div class="menubook-spread">
+          <div class="menubook-page"><img src="images-v8/menu3.webp" alt="" data-i18n-attr="alt:menubook.alt3" loading="lazy" /></div>
+          <div class="menubook-page"><img src="images-v8/menu4.webp" alt="" data-i18n-attr="alt:menubook.alt4" loading="lazy" /></div>
+        </div>
+      </div>
+      <button class="menubook-zoom magnetic" data-i18n-attr="aria-label:menubook.zoom" type="button">⛶</button>
+    </div>
+    <button class="menubook-nav next magnetic" data-i18n-attr="aria-label:menubook.next" type="button">›</button>
+  </div>
+
+  <div class="menubook-counter">
+    <span class="cur">01</span>
+    <span class="sep">/</span>
+    <span class="total">02</span>
+  </div>
+</section>
+
+<!-- Menu Book Lightbox -->
+<div class="menubook-lightbox" id="menuLightbox" aria-hidden="true">
+  <button class="lightbox-close" data-i18n-attr="aria-label:lightbox.close" type="button">✕</button>
+  <button class="lightbox-nav prev" data-i18n-attr="aria-label:lightbox.prev" type="button">‹</button>
+  <img class="lightbox-img" src="" alt="" />
+  <button class="lightbox-nav next" data-i18n-attr="aria-label:lightbox.next" type="button">›</button>
+  <div class="lightbox-counter"></div>
+</div>
+
+<!-- ══ BRAND STORY ══ -->
+<section id="story" data-i18n-attr="aria-label:story.aria">
+  <div class="story-left">
+    <div class="story-left-bg"></div>
+    <div class="story-left-overlay"></div>
+    <div class="story-left-content">
+      <span class="section-eyebrow gsap-fade-section" data-i18n="story.eyebrow1">OUR STORY</span>
+      <h2 class="section-heading story-heading reveal-text gsap-fade-section" data-i18n="story.title1">전통이
+살아있는 맛</h2>
+      <div class="gold-line gsap-fade-section" style="width:60px;"></div>
+      <p class="story-body gsap-fade-section" data-i18n="story.body1">수십 년간 이어온 참숯 불 위의 갈비 한 점에는 명지원의 역사가 담겨 있습니다.</p>
+    </div>
+  </div>
+  <div class="story-right">
+    <span class="section-eyebrow gsap-fade-section" data-i18n="story.eyebrow2">명지원 이야기</span>
+    <h3 class="story-right-heading reveal-text gsap-fade-section" data-i18n="story.title2">순천의 명가,
+명지원의 진심</h3>
+    <p class="story-right-body gsap-fade-section" data-i18n="story.body2">1990년대부터 전라남도 순천에서 정성을 다해 운영해온 명지원은, 국내산 최상급 갈비를 전통 참숯으로 구워내는 방식을 한결같이 고수해왔습니다. 손님 한 분 한 분을 가족처럼 대접하는 마음가짐이 오늘의 명지원을 만들었습니다.</p>
+    <ul class="story-bullets gsap-fade-section">
+      <li data-i18n="story.bullet1">국내산 최상급 소고기만 사용</li>
+      <li data-i18n="story.bullet2">30년 이상의 전통 숯불갈비 전문점</li>
+      <li data-i18n="story.bullet3">다이닝코드 ★ 4.9 / 순천 대표 맛집</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══ SPACE GALLERY ══ -->
+<section id="space" data-i18n-attr="aria-label:space.aria">
+  <div class="space-header">
+    <span class="section-eyebrow gsap-fade-section" data-i18n="space.eyebrow">SPACE</span>
+    <h2 class="section-heading space-heading reveal-text gsap-fade-section" data-i18n="space.title">공간</h2>
+    <p class="space-subtitle gsap-fade-section" data-i18n="space.sub">전통 한옥의 정취를 담은 명지원의 공간</p>
+  </div>
+
+  <div class="space-grid gsap-fade-section">
+    <div class="space-grid-item wide tilt-card clip-reveal-img">
+      <img src="images-v8/DSC00386.webp" alt="" data-i18n-attr="alt:space.cap1" loading="lazy">
+      <div class="space-grid-vignette"></div>
+    </div>
+    <div class="space-grid-item tall tilt-card clip-reveal-img">
+      <img src="images-v8/DSC00391.webp" alt="" data-i18n-attr="alt:space.cap2" loading="lazy">
+      <div class="space-grid-vignette"></div>
+    </div>
+    <div class="space-grid-item tilt-card clip-reveal-img">
+      <img src="images-v8/DSC00402.webp" alt="" data-i18n-attr="alt:space.cap3" loading="lazy">
+      <div class="space-grid-vignette"></div>
+    </div>
+    <div class="space-grid-item tilt-card clip-reveal-img">
+      <img src="images-v8/DSC00376.webp" alt="" data-i18n-attr="alt:space.cap4" loading="lazy">
+      <div class="space-grid-vignette"></div>
+    </div>
+    <div class="space-grid-item tilt-card clip-reveal-img">
+      <img src="images-v8/DSC00394.webp" alt="" data-i18n-attr="alt:space.cap5" loading="lazy">
+      <div class="space-grid-vignette"></div>
+    </div>
+  </div>
+
+  <p class="space-note gsap-fade-section" data-i18n="space.note">프라이빗 다이닝 룸 별도 예약 가능 · 전화 문의</p>
+</section>
+
+
+<!-- ══ PRIVATE DINING ══ -->
+<section id="private" data-i18n-attr="aria-label:private.aria">
+  <div class="private-bg" id="private-bg"></div>
+  <div class="private-overlay"></div>
+  <div class="private-content">
+    <span class="private-label gsap-fade-section" data-i18n="private.eyebrow">PRIVATE DINING</span>
+    <h2 class="section-heading private-heading reveal-text gsap-fade-section" data-i18n="private.title">소중한 모임을
+위한 공간</h2>
+    <div class="private-gold-line gsap-fade-section"></div>
+    <p class="private-desc gsap-fade-section" data-i18n="private.body">전통 한옥 양식의 독립된 룸에서 고요하고 격조 있는 식사를 즐기실 수 있습니다.</p>
+    <a href="tel:05071337239" class="btn-cream-outline magnetic gsap-fade-section" data-i18n="private.cta">예약 문의 →</a>
+  </div>
+</section>
+
+
+<!-- ══ CTA CARDS ══ -->
+<section id="cta-cards" data-i18n-attr="aria-label:cta.aria">
+  <div class="cta-cards-inner">
+
+    <div class="cta-card tilt-card gsap-fade-section magnetic">
+      <span class="cta-card-icon" aria-hidden="true">🗓</span>
+      <h3 class="cta-card-title" data-i18n="cta.lunch.title">런치 특선</h3>
+      <p class="cta-card-desc" data-i18n="cta.lunch.desc">평일 오후 2시까지 · 알뜰하게 즐기는 명지원의 점심</p>
+      <a href="#menu" class="cta-card-link" data-i18n="cta.more">더보기 →</a>
+    </div>
+
+    <div class="cta-card tilt-card gsap-fade-section magnetic">
+      <span class="cta-card-icon" aria-hidden="true">🏮</span>
+      <h3 class="cta-card-title" data-i18n="cta.private.title">프라이빗 다이닝</h3>
+      <p class="cta-card-desc" data-i18n="cta.private.desc">룸 예약 가능 · 소중한 모임을 위한 특별한 공간</p>
+      <a href="tel:05071337239" class="cta-card-link" data-i18n="cta.reserve">예약 문의 →</a>
+    </div>
+
+    <div class="cta-card tilt-card gsap-fade-section magnetic">
+      <span class="cta-card-icon" aria-hidden="true">📖</span>
+      <h3 class="cta-card-title" data-i18n="cta.menubook.title">메뉴판 전체보기</h3>
+      <p class="cta-card-desc" data-i18n="cta.menubook.desc">정식 메뉴판 2단 구성 · 고기류·식사류·점심특선까지</p>
+      <a href="#menubook" class="cta-card-link menubook-cta-link" data-i18n="cta.open">펼쳐보기 →</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ PHOTO GALLERY GRID ══ -->
+<section id="gallery" data-i18n-attr="aria-label:gallery.aria">
+  <div class="gallery-header">
+    <span class="section-eyebrow gsap-fade-section" data-i18n="gallery.eyebrow">GALLERY</span>
+    <h2 class="section-heading gallery-heading reveal-text gsap-fade-section" data-i18n="gallery.title">갤러리</h2>
+    <p class="gallery-subtitle gsap-fade-section" data-i18n="gallery.sub">명지원의 공간과 음식을 담은 사진들</p>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00565.webp" alt="" data-i18n-attr="alt:gallery.alt1" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00535.webp" alt="" data-i18n-attr="alt:gallery.alt2" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00483.webp" alt="" data-i18n-attr="alt:gallery.alt3" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00422.webp" alt="" data-i18n-attr="alt:gallery.alt4" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00477.webp" alt="" data-i18n-attr="alt:gallery.alt5" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00496.webp" alt="" data-i18n-attr="alt:gallery.alt6" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00408.webp" alt="" data-i18n-attr="alt:gallery.alt7" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00577.webp" alt="" data-i18n-attr="alt:gallery.alt8" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+    <div class="gallery-grid-item tilt-card">
+      <img src="images-v8/DSC00582.webp" alt="" data-i18n-attr="alt:gallery.alt9" loading="lazy">
+      <div class="gallery-grid-overlay"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ LOCATION ══ -->
+<section id="location" data-i18n-attr="aria-label:location.aria">
+  <div class="location-inner">
+
+    <div class="location-left">
+      <span class="section-eyebrow location-eyebrow gsap-fade-section" data-i18n="location.eyebrow">LOCATION</span>
+      <h2 class="section-heading location-heading reveal-text gsap-fade-section" data-i18n="location.title">오시는 길</h2>
+      <div class="location-gold-line gsap-fade-section"></div>
+
+      <div class="location-items gsap-fade-section">
+        <div class="location-item">
+          <span class="location-item-icon" aria-hidden="true">📍</span>
+          <div>
+            <span class="location-item-label" data-i18n="location.address.label">주소</span>
+            <span class="location-item-value" data-i18n="location.address.value">전남 순천시 연향상가길 31</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-item-icon" aria-hidden="true">🕐</span>
+          <div>
+            <span class="location-item-label" data-i18n="location.hours.label">영업시간</span>
+            <span class="location-item-value" data-i18n="location.hours.value">매일 11:30 ~ 22:00 · 라스트오더 21:00</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-item-icon" aria-hidden="true">📞</span>
+          <div>
+            <span class="location-item-label" data-i18n="location.phone.label">전화</span>
+            <span class="location-item-value"><a href="tel:05071337239" data-i18n="location.phone.value">0507-1337-2392</a></span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-item-icon" aria-hidden="true">🚗</span>
+          <div>
+            <span class="location-item-label" data-i18n="location.parking.label">주차</span>
+            <span class="location-item-value" data-i18n="location.parking.value">전용 주차장 보유</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="location-actions gsap-fade-section">
+        <a href="tel:05071337239" class="btn-gold-fill magnetic" data-i18n="location.cta">전화 예약하기</a>
+        <a href="https://map.naver.com/p/search/%EC%A0%84%EB%82%A8%20%EC%88%9C%EC%B2%9C%EC%8B%9C%20%EC%97%B0%ED%96%A5%EC%83%81%EA%B0%80%EA%B8%B8%2031" class="btn-gold-map magnetic" target="_blank" rel="noopener noreferrer" data-i18n="location.naver">네이버 지도에서 보기</a>
+      </div>
+    </div>
+
+    <div class="location-map gsap-fade-section">
+      <iframe
+        src="https://maps.google.com/maps?q=전남+순천시+연향상가길+31&output=embed&z=16"
+        data-i18n-attr="title:location.mapTitle"
+        title="명지원 위치"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+
+<!-- ══ FOOTER ══ -->
+<footer id="footer" role="contentinfo">
+  <div class="footer-top">
+
+    <div class="footer-col footer-col-brand">
+      <img src="images-v8/logo.svg" alt="MYEONGJIWON" onerror="this.style.display='none'">
+      <div class="footer-col-brand-info" data-i18n="footer.brandInfo">전남 순천시 연향상가길 31 · 0507-1337-2392 · 매일 11:30 ~ 22:00 · 라스트오더 21:00 · © 2025 명지원</div>
+    </div>
+
+    <div class="footer-col">
+      <span class="footer-col-title" data-i18n="footer.menu.title">메뉴</span>
+      <ul class="footer-col-links">
+        <li><a href="#menu" data-i18n="footer.menu.item1">녹차돼지갈비</a></li>
+        <li><a href="#menu" data-i18n="footer.menu.item2">소왕양념갈비</a></li>
+        <li><a href="#menu" data-i18n="footer.menu.item3">소양념갈비</a></li>
+        <li><a href="#menu" data-i18n="footer.menu.item4">육회</a></li>
+        <li><a href="#menu" data-i18n="footer.menu.item5">점심특선</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <span class="footer-col-title" data-i18n="footer.space.title">공간</span>
+      <ul class="footer-col-links">
+        <li><a href="#space" data-i18n="footer.space.item1">본관</a></li>
+        <li><a href="#space" data-i18n="footer.space.item2">신관</a></li>
+        <li><a href="#private" data-i18n="footer.space.item3">프라이빗 다이닝</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <span class="footer-col-title" data-i18n="footer.contact.title">예약·문의</span>
+      <ul class="footer-col-links">
+        <li><a href="tel:05071337239" data-i18n="footer.contact.item1">전화예약</a></li>
+        <li><a href="tel:05071337239" data-i18n="footer.contact.item2">단체예약</a></li>
+        <li><a href="#location" data-i18n="footer.contact.item3">위치안내</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <span class="footer-col-title" data-i18n="footer.visit.title">오시는 길</span>
+      <ul class="footer-col-links" style="gap:6px;">
+        <li><a href="#location" data-i18n="location.address.value">전남 순천시 연향상가길 31</a></li>
+        <li><a href="#location" data-i18n="footer.visit.item2">매일 11:30 ~ 22:00</a></li>
+        <li><a href="#location" data-i18n="footer.visit.item3">라스트오더 21:00</a></li>
+        <li><a href="#location" data-i18n="location.parking.value">전용 주차장 보유</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom" data-i18n="footer.copyright">© 2025 명지원. All rights reserved. · 전남 순천시 연향상가길 31</div>
+</footer>
+
+
+<!-- ════════════════════════════════════════════
+     JAVASCRIPT — ALL SYSTEMS
+════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ═══════════════════════════════════════════
+     1. LENIS SMOOTH SCROLL + GSAP INTEGRATION
+  ═══════════════════════════════════════════ */
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+    infinite: false,
+  });
+
+  // Integrate Lenis RAF with GSAP ticker
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+
+  // Register ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Sync lenis scroll with ScrollTrigger
+  lenis.on('scroll', ScrollTrigger.update);
+
+  /* ═══════════════════════════════════════════
+     2. PAGE TRANSITION OVERLAY
+  ═══════════════════════════════════════════ */
+  const overlay = document.getElementById('page-transition');
+  const overlayLogo = document.getElementById('page-transition-logo');
+  const overlayLine = document.getElementById('page-transition-line');
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      overlay.style.display = 'none';
+      overlay.style.pointerEvents = 'none';
+    }
+  });
+
+  tl.to(overlayLogo, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.2)
+    .to(overlayLine, { width: 200, duration: 0.6, ease: 'power2.inOut' }, 0.5)
+    .to(overlay, { y: '-100%', duration: 0.8, ease: 'expo.inOut', delay: 0.3 }, 1.1)
+    .from('#main-content', { opacity: 0, duration: 0.4, ease: 'power2.out' }, 1.5);
+
+  /* ═══════════════════════════════════════════
+     3. EMBER / FIRE PARTICLE CANVAS
+  ═══════════════════════════════════════════ */
+  const canvas = document.getElementById('ember-canvas');
+  const ctx = canvas.getContext('2d');
+  const DPR = window.devicePixelRatio || 1;
+
+  function resizeCanvas() {
+    canvas.width  = window.innerWidth  * DPR;
+    canvas.height = window.innerHeight * DPR;
+    canvas.style.width  = window.innerWidth  + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.scale(DPR, DPR);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+
+  const EMBER_COUNT = 160;
+  const embers = [];
+
+  function createEmber(forceBottom) {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    return {
+      x: Math.random() * W,
+      y: forceBottom ? H + Math.random() * 60 : Math.random() * H,
+      radius: 0.5 + Math.random() * 1.5,
+      alpha: 0.1 + Math.random() * 0.9,
+      speedY: -(0.3 + Math.random() * 1.0),
+      speedX: (Math.random() - 0.5) * 0.4,
+      phase: Math.random() * Math.PI * 2,
+      freq: 0.008 + Math.random() * 0.012,
+      life: 1.0,
+      decay: 0.002 + Math.random() * 0.004,
+      color: Math.random() > 0.5
+        ? `rgba(200,145,74,`
+        : `rgba(232,197,122,`,
+    };
+  }
+
+  for (let i = 0; i < EMBER_COUNT; i++) {
+    embers.push(createEmber(false));
+  }
+
+  let frameCount = 0;
+  function animateEmbers() {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    ctx.clearRect(0, 0, W, H);
+    frameCount++;
+
+    for (let i = 0; i < embers.length; i++) {
+      const e = embers[i];
+      e.phase += e.freq * 60;
+      e.x += e.speedX + Math.sin(e.phase) * 0.35;
+      e.y += e.speedY;
+      e.life -= e.decay;
+
+      // Fade based on position: fade out near top, full opacity in middle
+      const verticalAlpha = e.y < H * 0.2
+        ? Math.max(0, e.y / (H * 0.2))
+        : 1;
+
+      const alpha = Math.max(0, e.alpha * e.life * verticalAlpha);
+
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+      ctx.fillStyle = e.color + alpha + ')';
+      ctx.fill();
+
+      // Respawn when out of bounds or life expired
+      if (e.y < -10 || e.life <= 0 || e.x < -20 || e.x > W + 20) {
+        embers[i] = createEmber(true);
+      }
+    }
+
+    requestAnimationFrame(animateEmbers);
+  }
+  animateEmbers();
+
+  /* ═══════════════════════════════════════════
+     4. SCROLL PROGRESS BAR
+  ═══════════════════════════════════════════ */
+  const progressBar = document.getElementById('scroll-progress');
+
+  lenis.on('scroll', ({ scroll, limit }) => {
+    const pct = limit > 0 ? (scroll / limit) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  });
+
+  /* ═══════════════════════════════════════════
+     5. MAGNETIC CURSOR
+  ═══════════════════════════════════════════ */
+  const cursorDot  = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+  let mouseX = 0, mouseY = 0;
+  let ringX  = 0, ringY  = 0;
+
+  // Active magnetic target tracking
+  let activeMagneticEl   = null;
+  let magneticOffsetX    = 0;
+  let magneticOffsetY    = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    if (!isMobile()) {
+      gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0, overwrite: true });
+    }
+  });
+
+  // Ring lerp via GSAP quickTo
+  const ringXSetter = gsap.quickTo(cursorRing, 'x', { duration: 0.2, ease: 'power2.out' });
+  const ringYSetter = gsap.quickTo(cursorRing, 'y', { duration: 0.2, ease: 'power2.out' });
+
+  function lerpCursorRing() {
+    if (!isMobile()) {
+      ringXSetter(mouseX);
+      ringYSetter(mouseY);
+    }
+    requestAnimationFrame(lerpCursorRing);
+  }
+  lerpCursorRing();
+
+  // Magnetic elements — skip pull transform for nav/small links to keep hit targets stable
+  const magneticEls = document.querySelectorAll('.magnetic');
+  magneticEls.forEach(el => {
+    const skipPull = !!el.closest('#nav') || el.classList.contains('hero-dot');
+    el.addEventListener('mouseenter', () => {
+      cursorRing.classList.add('magnetic-hover');
+      activeMagneticEl = el;
+    });
+
+    if (!skipPull) {
+      el.addEventListener('mousemove', (e) => {
+        if (!activeMagneticEl) return;
+        const rect = el.getBoundingClientRect();
+        const centerX = rect.left + rect.width  / 2;
+        const centerY = rect.top  + rect.height / 2;
+        const dX = (e.clientX - centerX) * 0.25;
+        const dY = (e.clientY - centerY) * 0.25;
+        const clampedX = Math.max(-12, Math.min(12, dX));
+        const clampedY = Math.max(-12, Math.min(12, dY));
+        gsap.to(el, { x: clampedX, y: clampedY, duration: 0.3, ease: 'power2.out', overwrite: true });
+      });
+    }
+
+    el.addEventListener('mouseleave', () => {
+      cursorRing.classList.remove('magnetic-hover');
+      activeMagneticEl = null;
+      if (!skipPull) {
+        gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)', overwrite: true });
+      }
+    });
+  });
+
+  /* ═══════════════════════════════════════════
+     6. ANNOUNCEMENT BAR
+  ═══════════════════════════════════════════ */
+  const announcement     = document.getElementById('announcement');
+  const announcementClose = document.getElementById('announcement-close');
+  const nav               = document.getElementById('nav');
+
+  announcementClose.addEventListener('click', () => {
+    announcement.classList.add('closed');
+    document.documentElement.style.setProperty('--announcement-h', '0px');
+    nav.classList.add('announcement-closed');
+  });
+
+  /* ═══════════════════════════════════════════
+     7. NAV SCROLL STATE
+  ═══════════════════════════════════════════ */
+  function updateNav() {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  /* ═══════════════════════════════════════════
+     8. NAV LOGO FALLBACK
+  ═══════════════════════════════════════════ */
+  const navLogoImg  = document.querySelector('.nav-logo img');
+  const navLogoText = document.getElementById('nav-logo-text');
+  if (navLogoImg) {
+    navLogoImg.addEventListener('error', () => {
+      navLogoImg.style.display = 'none';
+      if (navLogoText) navLogoText.style.display = 'inline';
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     9. MOBILE HAMBURGER MENU
+  ═══════════════════════════════════════════ */
+  const hamburger  = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-menu-link, .mobile-menu-phone');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    mobileMenu.setAttribute('aria-hidden', !isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (isOpen) lenis.stop(); else lenis.start();
+  });
+
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lenis.start();
+    });
+  });
+
+  /* ═══════════════════════════════════════════
+     10. HERO SLIDESHOW
+  ═══════════════════════════════════════════ */
+  const slides    = document.querySelectorAll('.hero-slide');
+  const dots      = document.querySelectorAll('.hero-dot');
+  let currentSlide = 0;
+  let slideInterval;
+  const heroEl = document.getElementById('hero');
+
+  function goToSlide(idx) {
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    dots[currentSlide].setAttribute('aria-selected', 'false');
+    currentSlide = (idx + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+    dots[currentSlide].setAttribute('aria-selected', 'true');
+  }
+
+  function startSlideshow() {
+    stopSlideshow();
+    slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+  }
+
+  function stopSlideshow() {
+    clearInterval(slideInterval);
+  }
+
+  document.getElementById('hero-prev').addEventListener('click', () => { goToSlide(currentSlide - 1); startSlideshow(); });
+  document.getElementById('hero-next').addEventListener('click', () => { goToSlide(currentSlide + 1); startSlideshow(); });
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => { goToSlide(i); startSlideshow(); });
+  });
+
+  heroEl.addEventListener('mouseenter', stopSlideshow);
+  heroEl.addEventListener('mouseleave', startSlideshow);
+
+  // Touch swipe
+  let touchStartX = 0;
+  heroEl.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  heroEl.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+      startSlideshow();
+    }
+  }, { passive: true });
+
+  startSlideshow();
+
+  /* ═══════════════════════════════════════════
+     11. GSAP SECTION FADE-IN REVEALS
+  ═══════════════════════════════════════════ */
+  gsap.utils.toArray('.gsap-fade-section').forEach(el => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+        }
+      }
+    );
+  });
+
+  /* ═══════════════════════════════════════════
+     12. WORD-BY-WORD TEXT REVEAL (.reveal-text)
+  ═══════════════════════════════════════════ */
+  document.querySelectorAll('.reveal-text').forEach(el => {
+    // Split text into word spans
+    const originalText = el.innerHTML;
+    const words = el.innerText.split(/\s+/).filter(w => w.length > 0);
+    el.innerHTML = words.map(w =>
+      `<span class="word"><span class="word-inner">${w}</span></span>`
+    ).join(' ');
+
+    const wordInners = el.querySelectorAll('.word-inner');
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => {
+        gsap.to(wordInners, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power3.out',
+        });
+      }
+    });
+  });
+
+  /* ═══════════════════════════════════════════
+     13. CLIP-PATH REVEALS FOR IMAGES
+  ═══════════════════════════════════════════ */
+  gsap.utils.toArray('.clip-reveal-img').forEach((el, i) => {
+    gsap.fromTo(el,
+      { clipPath: 'inset(0 100% 0 0)' },
+      {
+        clipPath: 'inset(0 0% 0 0)',
+        duration: 1.0,
+        ease: 'power3.inOut',
+        delay: i * 0.08,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 82%',
+          once: true,
+        }
+      }
+    );
+  });
+
+  /* ═══════════════════════════════════════════
+     14. GSAP PINNED HORIZONTAL SCROLL — MENU
+  ═══════════════════════════════════════════ */
+  const menuTrack = document.getElementById('menu-track');
+
+  function setupHorizontalScroll() {
+    if (window.innerWidth <= 768) return; // Mobile: use native scroll
+
+    const menuSection = document.querySelector('.menu-section');
+
+    gsap.to(menuTrack, {
+      x: () => -(menuTrack.scrollWidth - window.innerWidth + 120),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: menuSection,
+        pin: true,
+        scrub: 1,
+        end: () => `+=${menuTrack.scrollWidth}`,
+        invalidateOnRefresh: true,
+      }
+    });
+  }
+  setupHorizontalScroll();
+
+  /* ═══════════════════════════════════════════
+     15. PARALLAX — PRIVATE DINING BG
+  ═══════════════════════════════════════════ */
+  const privateBg = document.getElementById('private-bg');
+  if (privateBg) {
+    gsap.to(privateBg, {
+      yPercent: -20,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#private',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      }
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     16. PARALLAX — STORY LEFT BG
+  ═══════════════════════════════════════════ */
+  const storyLeftBg = document.querySelector('.story-left-bg');
+  if (storyLeftBg) {
+    gsap.to(storyLeftBg, {
+      yPercent: -15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#story',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      }
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     17. NUMBER COUNTER ANIMATIONS (HERITAGE)
+  ═══════════════════════════════════════════ */
+  document.querySelectorAll('.heritage-number[data-count]').forEach(el => {
+    const target   = parseFloat(el.dataset.count);
+    const decimals = parseInt(el.dataset.decimals || '0');
+    const suffix   = el.dataset.suffix || '';
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => {
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: 1.8,
+          ease: 'power2.out',
+          onUpdate: () => {
+            el.textContent = obj.val.toFixed(decimals) + suffix;
+          },
+          onComplete: () => {
+            el.textContent = target.toFixed(decimals) + suffix;
+          }
+        });
+      }
+    });
+  });
+
+  /* ═══════════════════════════════════════════
+     18. 3D TILT ON HOVER (.tilt-card)
+  ═══════════════════════════════════════════ */
+  if (!isMobile()) {
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      const highlight = card.querySelector('.menu-card-tilt-highlight');
+
+      // Create GSAP quickTo setters for smooth 60fps tilt
+      const xSetter = gsap.quickTo(card, '--rotY', { duration: 0.3, ease: 'power2.out' });
+      const ySetter = gsap.quickTo(card, '--rotX', { duration: 0.3, ease: 'power2.out' });
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const relX = (e.clientX - rect.left) / rect.width  - 0.5; // -0.5 to 0.5
+        const relY = (e.clientY - rect.top)  / rect.height - 0.5;
+
+        gsap.to(card, {
+          rotationY:   relX * 8,
+          rotationX:  -relY * 8,
+          scale: 1.02,
+          transformPerspective: 800,
+          ease: 'power2.out',
+          duration: 0.3,
+          overwrite: true,
+        });
+
+        // Move highlight radial gradient
+        if (highlight) {
+          const posX = (relX + 0.5) * 100;
+          const posY = (relY + 0.5) * 100;
+          highlight.style.background =
+            `radial-gradient(circle at ${posX}% ${posY}%, rgba(232,197,122,0.18) 0%, transparent 70%)`;
+        }
+      });
+
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          rotationY: 0,
+          rotationX: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: 'elastic.out(1, 0.5)',
+          overwrite: true,
+        });
+        if (highlight) highlight.style.background = '';
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     19. SMOOTH SCROLL WITH LENIS ANCHOR LINKS
+  ═══════════════════════════════════════════ */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      const targetId = anchor.getAttribute('href');
+      if (targetId === '#') return;
+      const targetEl = document.querySelector(targetId);
+      if (!targetEl) return;
+      e.preventDefault();
+      const announcementH = announcement.classList.contains('closed') ? 0
+        : parseInt(getComputedStyle(document.documentElement).getPropertyValue('--announcement-h'));
+      const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height'));
+      const offset = announcementH + navH;
+      lenis.scrollTo(targetEl, { offset: -offset, duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    });
+  });
+
+  /* ═══════════════════════════════════════════
+     20. GALLERY / SPACE STAGGER ENTRANCE
+  ═══════════════════════════════════════════ */
+  const galleryItems = document.querySelectorAll('.gallery-grid-item');
+  const galleryGrid  = document.querySelector('.gallery-grid');
+
+  if (galleryGrid) {
+    ScrollTrigger.create({
+      trigger: galleryGrid,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.from(galleryItems, {
+          opacity: 0,
+          scale: 0.92,
+          duration: 0.6,
+          stagger: { each: 0.06, grid: [3, 3], from: 'start' },
+          ease: 'power3.out',
+        });
+      }
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     21. HERO PARALLAX (foreground / background)
+  ═══════════════════════════════════════════ */
+  // Parallax on active hero slide backgrounds
+  ScrollTrigger.create({
+    trigger: '#hero',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: true,
+    onUpdate: (self) => {
+      const progress = self.progress;
+      document.querySelectorAll('.hero-slide-bg').forEach(bg => {
+        bg.style.transform = `scale(1.1) translateY(${progress * 20}%)`;
+      });
+      document.querySelectorAll('.hero-slide-content').forEach(content => {
+        content.style.transform = `translateY(${progress * -10}%)`;
+      });
+    }
+  });
+
+  /* ═══════════════════════════════════════════
+     22. CTA CARDS STAGGER ENTRANCE
+  ═══════════════════════════════════════════ */
+  const ctaCards = document.querySelectorAll('.cta-card');
+  if (ctaCards.length) {
+    ScrollTrigger.create({
+      trigger: '#cta-cards',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.from(ctaCards, {
+          opacity: 0,
+          y: 50,
+          duration: 0.7,
+          stagger: 0.15,
+          ease: 'power3.out',
+        });
+      }
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     23. LOCATION SECTION CLIP REVEAL
+  ═══════════════════════════════════════════ */
+  const locationMap = document.querySelector('.location-map');
+  if (locationMap) {
+    gsap.fromTo(locationMap,
+      { clipPath: 'inset(0 0 100% 0)' },
+      {
+        clipPath: 'inset(0 0 0% 0)',
+        duration: 1.1,
+        ease: 'power3.inOut',
+        scrollTrigger: {
+          trigger: locationMap,
+          start: 'top 82%',
+          once: true,
+        }
+      }
+    );
+  }
+
+  /* ═══════════════════════════════════════════
+     24. RESIZE HANDLER
+  ═══════════════════════════════════════════ */
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+      resizeCanvas();
+    }, 250);
+  }, { passive: true });
+
+  /* ═══════════════════════════════════════════
+     21. MENU BOOK (v7) — page flip, lightbox, swipe
+  ═══════════════════════════════════════════ */
+  (function initMenuBook(){
+    const section = document.getElementById('menubook');
+    if (!section) return;
+
+    const spreads = Array.from(section.querySelectorAll('.menubook-spread'));
+    const pages = Array.from(section.querySelectorAll('.menubook-page'));
+    const tabs  = Array.from(section.querySelectorAll('.menubook-tab'));
+    const prevBtn = section.querySelector('.menubook-nav.prev');
+    const nextBtn = section.querySelector('.menubook-nav.next');
+    const zoomBtn = section.querySelector('.menubook-zoom');
+    const frame   = section.querySelector('.menubook-frame');
+    const curEl   = section.querySelector('.menubook-counter .cur');
+    const totalEl = section.querySelector('.menubook-counter .total');
+    const total   = spreads.length;
+    let currentIdx = 0;
+    let isAnimating = false;
+
+    totalEl.textContent = String(total).padStart(2, '0');
+
+    function pad(n){ return String(n + 1).padStart(2, '0'); }
+
+    function updateCounter(){
+      curEl.textContent = pad(currentIdx);
+    }
+
+    function updateActiveTab(){
+      tabs.forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+    }
+
+    function flipTo(newIdx){
+      if (isAnimating || newIdx === currentIdx) return;
+      newIdx = (newIdx + total) % total;
+      isAnimating = true;
+      const current = spreads[currentIdx];
+      const next    = spreads[newIdx];
+      const direction = newIdx > currentIdx ? 1 : -1;
+
+      const tl = gsap.timeline({ onComplete: () => { isAnimating = false; } });
+      tl.to(current, {
+        opacity: 0,
+        x: -28 * direction,
+        duration: 0.35,
+        ease: 'power2.in'
+      })
+      .set(current, { display: 'none' })
+      .add(() => { current.classList.remove('active'); next.classList.add('active'); })
+      .set(next, { display: 'grid', x: 28 * direction, opacity: 0 })
+      .to(next, {
+        x: 0,
+        opacity: 1,
+        duration: 0.45,
+        ease: 'power2.out'
+      });
+
+      currentIdx = newIdx;
+      updateCounter();
+      updateActiveTab();
+    }
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => flipTo(i)));
+    prevBtn.addEventListener('click', () => flipTo(currentIdx - 1));
+    nextBtn.addEventListener('click', () => flipTo(currentIdx + 1));
+
+    // Keyboard navigation when section in viewport
+    let inView = false;
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 80%',
+      end: 'bottom 20%',
+      onEnter:     () => { inView = true; },
+      onEnterBack: () => { inView = true; },
+      onLeave:     () => { inView = false; },
+      onLeaveBack: () => { inView = false; }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightboxOpen){
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowLeft')  lightboxNav(-1);
+        else if (e.key === 'ArrowRight') lightboxNav(1);
+        return;
+      }
+      if (!inView) return;
+      if (e.key === 'ArrowLeft')  flipTo(currentIdx - 1);
+      else if (e.key === 'ArrowRight') flipTo(currentIdx + 1);
+    });
+
+    // Touch swipe
+    let touchStartX = 0, touchEndX = 0;
+    frame.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    frame.addEventListener('touchend',   (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const dx = touchEndX - touchStartX;
+      if (Math.abs(dx) > 50){
+        if (dx < 0) flipTo(currentIdx + 1);
+        else        flipTo(currentIdx - 1);
+      }
+    }, { passive: true });
+
+    // Lightbox
+    const lightbox      = document.getElementById('menuLightbox');
+    const lightboxImg   = lightbox.querySelector('.lightbox-img');
+    const lightboxClose = lightbox.querySelector('.lightbox-close');
+    const lightboxPrev  = lightbox.querySelector('.lightbox-nav.prev');
+    const lightboxNext  = lightbox.querySelector('.lightbox-nav.next');
+    const lightboxCnt   = lightbox.querySelector('.lightbox-counter');
+    let lightboxIdx = 0;
+    let lightboxOpen = false;
+
+    function openLightbox(idx){
+      lightboxIdx = idx;
+      updateLightbox();
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      lightboxOpen = true;
+      document.body.style.overflow = 'hidden';
+      if (typeof lenis !== 'undefined' && lenis.stop) lenis.stop();
+    }
+
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxOpen = false;
+      document.body.style.overflow = '';
+      if (typeof lenis !== 'undefined' && lenis.start) lenis.start();
+    }
+
+    function lightboxNav(dir){
+      lightboxIdx = (lightboxIdx + dir + pages.length) % pages.length;
+      updateLightbox();
+    }
+
+    function updateLightbox(){
+      const img = pages[lightboxIdx].querySelector('img');
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCnt.textContent = pad(lightboxIdx) + ' / ' + String(pages.length).padStart(2,'0');
+    }
+
+    zoomBtn.addEventListener('click', () => openLightbox(currentIdx * 2));
+    pages.forEach((p, i) => p.querySelector('img').addEventListener('click', () => openLightbox(i)));
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', () => lightboxNav(-1));
+    lightboxNext.addEventListener('click', () => lightboxNav(1));
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+    // Entrance animation
+    gsap.set(frame, { clipPath: 'inset(0 50% 0 50%)', opacity: 0 });
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 70%',
+      once: true,
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.from('.menubook-intro .eyebrow', { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out' })
+          .from('.menubook-intro h2',       { opacity: 0, y: 30, duration: 1.0, ease: 'power3.out' }, '-=0.5')
+          .from('.menubook-intro p',        { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+          .from('.menubook-tab',            { opacity: 0, y: 20, duration: 0.6, stagger: 0.08, ease: 'power3.out' }, '-=0.4')
+          .to(frame, { clipPath: 'inset(0 0% 0 0%)', opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=0.3')
+          .from('.menubook-nav',            { opacity: 0, scale: 0.6, duration: 0.6, stagger: 0.1, ease: 'back.out(1.6)' }, '-=0.7')
+          .from('.menubook-counter',        { opacity: 0, y: 20, duration: 0.6, ease: 'power3.out' }, '-=0.4');
+      }
+    });
+
+    updateCounter();
+    updateActiveTab();
+  })();
+
+})();
+
+/* ═══════════════════════════════════════════
+   i18n — KO / EN language switching
+═══════════════════════════════════════════ */
+(function initI18n(){
+  const i18n = {
+    ko: {
+      "meta.title": "명지원 — 순천 숯불갈비 명가",
+      "announcement.text": "NEW · 정식 메뉴판 공개 · 매일 11:30 ~ 22:00 · 라스트오더 21:00 · 예약문의 0507-1337-2392",
+      "nav.intro": "소개",
+      "nav.menu": "메뉴",
+      "nav.space": "공간",
+      "nav.private": "프라이빗",
+      "nav.location": "오시는길",
+      "nav.reserve": "예약 문의",
+      "nav.phone": "0507-1337-2392",
+      "hero.slide1.eyebrow": "MYEONGJIWON SIGNATURE",
+      "hero.slide1.title": "불꽃 위에서\n완성되는 맛",
+      "hero.cta": "자세히 보기",
+      "hero.slide2.eyebrow": "SUNCHEON · KOREA",
+      "hero.slide2.title": "순천의 빛 속에\n빛나는 갈비",
+      "hero.slide3.eyebrow": "MAIN DINING",
+      "hero.slide3.title": "전통과 현대가\n어우러진 공간",
+      "hero.slide4.eyebrow": "SINCE 1990s",
+      "hero.slide4.title": "순천의 하늘 아래\n명가의 맛",
+      "hero.slide5.eyebrow": "PRIVATE DINING",
+      "hero.slide5.title": "소중한 모임을 위한\n특별한 공간",
+      "hero.scroll": "scroll",
+      "intro.title": "사람과 사람이 마주앉아 따뜻함을 나누는 공간",
+      "intro.body": "전라남도 순천에서 수십 년간 사랑받아온 명지원은 최상의 국내산 갈비를 전통 참숯 불 위에 구워 정성을 다해 대접합니다.",
+      "intro.ctaMenu": "메뉴 보기",
+      "intro.ctaLocation": "오시는 길",
+      "heritage.rating": "다이닝코드",
+      "heritage.brand": "명지원",
+      "heritage.title": "순천 숯불갈비\n대표 명가",
+      "heritage.years": "년의 역사",
+      "menu.eyebrow": "MENU",
+      "menu.title": "메뉴",
+      "menu.sub": "숯불 위에서 완성되는 맛",
+      "menu.card1.tag": "SIGNATURE",
+      "menu.card1.name": "소왕양념갈비",
+      "menu.card1.desc": "갈비대가 붙어있는 찐 소갈비",
+      "menu.card2.tag": "BEST SELLER",
+      "menu.card2.name": "녹차돼지갈비",
+      "menu.card2.desc": "청정 녹차 먹인 돼지 갈비",
+      "menu.card2.price": "19,000원",
+      "menu.card3.tag": "LUNCH",
+      "menu.card3.name": "점심특선",
+      "menu.card3.desc": "평일 14:00까지 · 2인 이상",
+      "menu.card4.tag": "SIDE",
+      "menu.card4.name": "오곡돌솥밥",
+      "menu.card4.desc": "갈비와 함께하는 구수한 돌솥밥",
+      "menu.card5.tag": "PRIVATE",
+      "menu.card5.name": "프라이빗 코스",
+      "menu.card5.desc": "룸에서 즐기는 특별한 식사",
+      "menu.note": "정성껏 준비한 한 상, 편안한 식사로 이어집니다",
+      "menubook.eyebrow": "MENU · 정식 메뉴판",
+      "menubook.title": "전통이 담긴 한 페이지",
+      "menubook.body": "30년 명인의 손맛을 담은 명지원의 정식 메뉴를 두 장씩 펼쳐 보세요.",
+      "menubook.tab1": "고기류",
+      "menubook.tab2": "식사류 / 점심특선",
+      "menubook.tab3": "식사류",
+      "menubook.tab4": "점심특선",
+      "story.eyebrow1": "OUR STORY",
+      "story.title1": "전통이\n살아있는 맛",
+      "story.body1": "수십 년간 이어온 참숯 불 위의 갈비 한 점에는 명지원의 역사가 담겨 있습니다.",
+      "story.eyebrow2": "명지원 이야기",
+      "story.title2": "순천의 명가,\n명지원의 진심",
+      "story.body2": "1990년대부터 전라남도 순천에서 정성을 다해 운영해온 명지원은, 국내산 최상급 갈비를 전통 참숯으로 구워내는 방식을 한결같이 고수해왔습니다. 손님 한 분 한 분을 가족처럼 대접하는 마음가짐이 오늘의 명지원을 만들었습니다.",
+      "story.bullet1": "국내산 최상급 소고기만 사용",
+      "story.bullet2": "30년 이상의 전통 숯불갈비 전문점",
+      "story.bullet3": "다이닝코드 ★ 4.9 / 순천 대표 맛집",
+      "space.eyebrow": "SPACE",
+      "space.title": "공간",
+      "space.sub": "전통 한옥의 정취를 담은 명지원의 공간",
+      "space.note": "프라이빗 다이닝 룸 별도 예약 가능 · 전화 문의",
+      "private.eyebrow": "PRIVATE DINING",
+      "private.title": "소중한 모임을\n위한 공간",
+      "private.body": "전통 한옥 양식의 독립된 룸에서 고요하고 격조 있는 식사를 즐기실 수 있습니다.",
+      "private.cta": "예약 문의 →",
+      "cta.lunch.title": "런치 특선",
+      "cta.lunch.desc": "평일 오후 2시까지 · 알뜰하게 즐기는 명지원의 점심",
+      "cta.more": "더보기 →",
+      "cta.private.title": "프라이빗 다이닝",
+      "cta.private.desc": "룸 예약 가능 · 소중한 모임을 위한 특별한 공간",
+      "cta.reserve": "예약 문의 →",
+      "cta.menubook.title": "메뉴판 전체보기",
+      "cta.menubook.desc": "정식 메뉴판 2단 구성 · 고기류·식사류·점심특선까지",
+      "cta.open": "펼쳐보기 →",
+      "gallery.eyebrow": "GALLERY",
+      "gallery.title": "갤러리",
+      "gallery.sub": "명지원의 공간과 음식을 담은 사진들",
+      "location.eyebrow": "LOCATION",
+      "location.title": "오시는 길",
+      "location.address.label": "주소",
+      "location.address.value": "전남 순천시 연향상가길 31",
+      "location.hours.label": "영업시간",
+      "location.hours.value": "매일 11:30 ~ 22:00 · 라스트오더 21:00",
+      "location.phone.label": "전화",
+      "location.phone.value": "0507-1337-2392",
+      "location.parking.label": "주차",
+      "location.parking.value": "전용 주차장 보유",
+      "location.cta": "전화 예약하기",
+      "location.naver": "네이버 지도에서 보기",
+      "footer.brandInfo": "전남 순천시 연향상가길 31 · 0507-1337-2392 · 매일 11:30 ~ 22:00 · 라스트오더 21:00 · © 2025 명지원",
+      "footer.menu.title": "메뉴",
+      "footer.menu.item1": "녹차돼지갈비",
+      "footer.menu.item2": "소왕양념갈비",
+      "footer.menu.item3": "소양념갈비",
+      "footer.menu.item4": "육회",
+      "footer.menu.item5": "점심특선",
+      "footer.space.title": "공간",
+      "footer.space.item1": "본관",
+      "footer.space.item2": "신관",
+      "footer.space.item3": "프라이빗 다이닝",
+      "footer.contact.title": "예약·문의",
+      "footer.contact.item1": "전화예약",
+      "footer.contact.item2": "단체예약",
+      "footer.contact.item3": "위치안내",
+      "footer.visit.title": "오시는 길",
+      "footer.visit.item2": "매일 11:30 ~ 22:00",
+      "footer.visit.item3": "라스트오더 21:00",
+      "footer.copyright": "© 2025 명지원. All rights reserved. · 전남 순천시 연향상가길 31"
+    },
+    en: {
+      "meta.title": "Myeongjiwon — Suncheon's Legendary Charcoal Galbi",
+      "announcement.text": "NEW · Official Menu Revealed · Daily 11:30 – 22:00 · Last Order 21:00 · Reservations +82-507-1337-2392",
+      "nav.intro": "About",
+      "nav.menu": "Menu",
+      "nav.space": "Space",
+      "nav.private": "Private",
+      "nav.location": "Location",
+      "nav.reserve": "Reserve",
+      "nav.phone": "+82-507-1337-2392",
+      "hero.slide1.eyebrow": "MYEONGJIWON SIGNATURE",
+      "hero.slide1.title": "Flavor Perfected\nOver Open Flame",
+      "hero.cta": "Discover More",
+      "hero.slide2.eyebrow": "SUNCHEON · KOREA",
+      "hero.slide2.title": "Galbi that Glows\nin Suncheon Light",
+      "hero.slide3.eyebrow": "MAIN DINING",
+      "hero.slide3.title": "Where Tradition\nMeets the Modern",
+      "hero.slide4.eyebrow": "SINCE 1990s",
+      "hero.slide4.title": "A Master's Taste\nUnder Suncheon Skies",
+      "hero.slide5.eyebrow": "PRIVATE DINING",
+      "hero.slide5.title": "A Refined Space\nfor Cherished Gatherings",
+      "hero.scroll": "scroll",
+      "intro.title": "A place where people gather to share warmth, face to face",
+      "intro.body": "For decades, Myeongjiwon of Suncheon, Jeollanam-do, has served the finest Korean galbi, carefully grilled over traditional charcoal with heartfelt craftsmanship.",
+      "intro.ctaMenu": "View Menu",
+      "intro.ctaLocation": "Find Us",
+      "heritage.rating": "Diningcode",
+      "heritage.brand": "Myeongjiwon",
+      "heritage.title": "Suncheon's Definitive\nCharcoal Galbi House",
+      "heritage.years": "Years of Heritage",
+      "menu.eyebrow": "MENU",
+      "menu.title": "Menu",
+      "menu.sub": "Flavor perfected over charcoal fire",
+      "menu.card1.tag": "SIGNATURE",
+      "menu.card1.name": "King Marinated Beef Galbi",
+      "menu.card1.desc": "Whole bone-in beef short rib, slow-marinated",
+      "menu.card2.tag": "BEST SELLER",
+      "menu.card2.name": "Green Tea Pork Galbi",
+      "menu.card2.desc": "Pork ribs raised on pristine green tea",
+      "menu.card2.price": "₩19,000",
+      "menu.card3.tag": "LUNCH",
+      "menu.card3.name": "Lunch Special",
+      "menu.card3.desc": "Weekdays until 2 PM · Party of two or more",
+      "menu.card4.tag": "SIDE",
+      "menu.card4.name": "Five-Grain Stone Pot Rice",
+      "menu.card4.desc": "Savory stone pot rice to accompany galbi",
+      "menu.card5.tag": "PRIVATE",
+      "menu.card5.name": "Private Course",
+      "menu.card5.desc": "An intimate tasting in a private room",
+      "menu.note": "A carefully prepared table, served for a relaxed meal",
+      "menubook.eyebrow": "MENU · Official Menu",
+      "menubook.title": "A Page of Tradition",
+      "menubook.body": "Turn through Myeongjiwon's official menu in paired spreads.",
+      "menubook.tab1": "Meat",
+      "menubook.tab2": "Meals / Lunch",
+      "menubook.tab3": "Meals",
+      "menubook.tab4": "Lunch Special",
+      "story.eyebrow1": "OUR STORY",
+      "story.title1": "Tradition,\nAlive on the Flame",
+      "story.body1": "Every bite of galbi off the charcoal carries the history of Myeongjiwon — unchanged for decades.",
+      "story.eyebrow2": "The Myeongjiwon Story",
+      "story.title2": "Suncheon's Noble House,\nthe Heart of Myeongjiwon",
+      "story.body2": "Since the 1990s, Myeongjiwon has devoted itself to hand-selecting the finest Korean beef and grilling it over traditional charcoal — a method held with unwavering consistency. The spirit of treating every guest as family is what Myeongjiwon was built upon.",
+      "story.bullet1": "Exclusively the finest domestic Korean beef",
+      "story.bullet2": "Over thirty years as a charcoal galbi house",
+      "story.bullet3": "Diningcode ★ 4.9 / Suncheon's signature dining",
+      "space.eyebrow": "SPACE",
+      "space.title": "Space",
+      "space.sub": "Myeongjiwon's setting, draped in traditional hanok grace",
+      "space.note": "Private dining rooms by advance reservation · Please call",
+      "private.eyebrow": "PRIVATE DINING",
+      "private.title": "A Space for the\nMost Cherished Gatherings",
+      "private.body": "Dine in quiet refinement within independent rooms styled in the tradition of the Korean hanok.",
+      "private.cta": "Reserve →",
+      "cta.lunch.title": "Lunch Special",
+      "cta.lunch.desc": "Weekdays until 2 PM · Myeongjiwon's lunch, beautifully priced",
+      "cta.more": "Explore →",
+      "cta.private.title": "Private Dining",
+      "cta.private.desc": "Room reservations available · A refined space for cherished moments",
+      "cta.reserve": "Reserve →",
+      "cta.menubook.title": "View Full Menu Book",
+      "cta.menubook.desc": "Two paired spreads · Premium meat, meals, and lunch specials",
+      "cta.open": "Turn the Page →",
+      "gallery.eyebrow": "GALLERY",
+      "gallery.title": "Gallery",
+      "gallery.sub": "Photographs of Myeongjiwon's space and cuisine",
+      "location.eyebrow": "LOCATION",
+      "location.title": "Find Us",
+      "location.address.label": "Address",
+      "location.address.value": "31, Yeonhyangsangga-gil, Suncheon-si, Jeollanam-do, Republic of Korea",
+      "location.hours.label": "Hours",
+      "location.hours.value": "Daily 11:30 – 22:00 · Last order 21:00",
+      "location.phone.label": "Phone",
+      "location.phone.value": "+82-507-1337-2392",
+      "location.parking.label": "Parking",
+      "location.parking.value": "Private parking available",
+      "location.cta": "Call to Reserve",
+      "location.naver": "Open in Naver Map",
+      "footer.brandInfo": "31, Yeonhyangsangga-gil, Suncheon-si, Jeollanam-do · +82-507-1337-2392 · Daily 11:30 – 22:00 · Last order 21:00 · © 2025 Myeongjiwon",
+      "footer.menu.title": "Menu",
+      "footer.menu.item1": "Green Tea Pork Galbi",
+      "footer.menu.item2": "King Marinated Beef Galbi",
+      "footer.menu.item3": "Marinated Beef Galbi",
+      "footer.menu.item4": "Yukhoe (Beef Tartare)",
+      "footer.menu.item5": "Lunch Special",
+      "footer.space.title": "Space",
+      "footer.space.item1": "Main Hall",
+      "footer.space.item2": "New Wing",
+      "footer.space.item3": "Private Dining",
+      "footer.contact.title": "Reservations",
+      "footer.contact.item1": "Phone Reservation",
+      "footer.contact.item2": "Group Booking",
+      "footer.contact.item3": "Directions",
+      "footer.visit.title": "Visit",
+      "footer.visit.item2": "Daily 11:30 – 22:00",
+      "footer.visit.item3": "Last Order 21:00",
+      "footer.copyright": "© 2025 Myeongjiwon. All rights reserved. · 31, Yeonhyangsangga-gil, Suncheon-si, Jeollanam-do"
+    }
+  };
+
+  const LANG_KEY = 'mjw-lang-v8';
+
+  function getSavedLang(){
+    const saved = localStorage.getItem(LANG_KEY);
+    if (saved && i18n[saved]) return saved;
+    const nav = (navigator.language || 'ko').toLowerCase();
+    return nav.startsWith('ko') ? 'ko' : 'en';
+  }
+
+  function applyTranslations(lang){
+    const dict = i18n[lang];
+    if (!dict) return;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = dict[key];
+      if (val === undefined) return;
+      // Preserve line breaks encoded as \n
+      if (val.includes('\n')){
+        el.innerHTML = val.split('\n').map(s => {
+          const d = document.createElement('div');
+          d.textContent = s;
+          return d.innerHTML;
+        }).join('<br>');
+      } else {
+        el.textContent = val;
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.getAttribute('data-i18n-attr').split(',').forEach(pair => {
+        const [attr, key] = pair.split(':').map(s => s.trim());
+        const val = dict[key];
+        if (val !== undefined) el.setAttribute(attr, val);
+      });
+    });
+
+    // Meta title
+    if (dict['meta.title']) document.title = dict['meta.title'];
+
+    // Phone tel: links
+    const telHref = lang === 'en' ? 'tel:+825071337239' : 'tel:05071337239';
+    document.querySelectorAll('a[href^="tel:"]').forEach(a => a.setAttribute('href', telHref));
+  }
+
+  function resetWordReveals(){
+    // v7/v8 word-reveal uses .reveal-text with nested <span class="word"><span class="word-inner">
+    document.querySelectorAll('.reveal-text').forEach(el => {
+      // Kill existing GSAP tweens
+      if (typeof gsap !== 'undefined') gsap.killTweensOf(el.querySelectorAll('.word-inner'));
+      // If already translated by applyTranslations, the innerHTML was just reset to plain text.
+      // Re-split into word spans.
+      const raw = el.textContent;
+      const html = raw.split(/(\s+)/).map(part => {
+        if (/^\s+$/.test(part)) return part;
+        return `<span class="word"><span class="word-inner">${part}</span></span>`;
+      }).join('');
+      el.innerHTML = html;
+      // If element is above viewport (already past), set visible immediately
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight){
+        if (typeof gsap !== 'undefined') {
+          gsap.set(el.querySelectorAll('.word-inner'), { y: 0, opacity: 1 });
+        }
+      }
+    });
+  }
+
+  function setLang(lang){
+    if (!i18n[lang]) return;
+    document.documentElement.lang = lang;
+    document.body.dataset.lang = lang;
+    applyTranslations(lang);
+    resetWordReveals();
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      const active = btn.dataset.lang === lang;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+    localStorage.setItem(LANG_KEY, lang);
+    if (typeof ScrollTrigger !== 'undefined') {
+      setTimeout(() => ScrollTrigger.refresh(), 100);
+    }
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setLang(btn.dataset.lang);
+    });
+  });
+
+  // Initialize
+  setLang(getSavedLang());
+})();
+</script>
+</body>
+</html>
